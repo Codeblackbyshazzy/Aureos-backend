@@ -3,6 +3,23 @@ import { stripe } from '@/lib/stripe';
 import { createAdminClient } from '@/lib/supabase';
 import Stripe from 'stripe';
 
+function mapStripeSubscriptionStatus(
+  status: Stripe.Subscription.Status
+): 'active' | 'cancelled' | 'past_due' | 'paused' {
+  switch (status) {
+    case 'active':
+    case 'trialing':
+      return 'active';
+    case 'past_due':
+    case 'unpaid':
+      return 'past_due';
+    case 'canceled':
+      return 'cancelled';
+    default:
+      return 'paused';
+  }
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const signature = req.headers.get('stripe-signature');
@@ -39,11 +56,9 @@ export async function POST(req: NextRequest) {
           break;
         }
 
-        const subscriptionResponse = await stripe.subscriptions.retrieve(
+        const subscriptionData = await stripe.subscriptions.retrieve(
           session.subscription as string
         );
-        
-        const subscriptionData = subscriptionResponse as any;
 
         // Create subscription record
         await adminClient.from('subscriptions').insert({
@@ -68,12 +83,12 @@ export async function POST(req: NextRequest) {
       }
 
       case 'customer.subscription.updated': {
-        const subscription = event.data.object as any;
+        const subscription = event.data.object as Stripe.Subscription;
 
         await adminClient
           .from('subscriptions')
           .update({
-            status: subscription.status as any,
+            status: mapStripeSubscriptionStatus(subscription.status),
             current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
             current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
           })
@@ -112,7 +127,7 @@ export async function POST(req: NextRequest) {
       }
 
       case 'invoice.payment_failed': {
-        const invoice = event.data.object as any;
+        const invoice = event.data.object as Stripe.Invoice;
 
         if (invoice.subscription) {
           await adminClient

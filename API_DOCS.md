@@ -1134,6 +1134,61 @@ Configure these events in your Stripe Dashboard:
 
 ---
 
+## Phase 2: Feature Parity Endpoints
+
+### OpenAPI
+
+A minimal OpenAPI specification is available at:
+
+- `GET /api/openapi`
+
+### Announcements / Changelog
+
+- `POST /api/projects/[id]/announcements` - Create announcement
+- `GET /api/projects/[id]/announcements` - List announcements (pagination + optional search)
+- `GET /api/projects/[id]/announcements/[announcementId]` - Get announcement (records read)
+- `PUT /api/projects/[id]/announcements/[announcementId]` - Update announcement
+- `DELETE /api/projects/[id]/announcements/[announcementId]` - Delete announcement
+- `POST /api/projects/[id]/announcements/[announcementId]/publish` - Publish announcement
+- `POST /api/projects/[id]/announcements/[announcementId]/subscribers` - Subscribe/unsubscribe
+- `GET /api/projects/[id]/announcements/[announcementId]/reads` - Read engagement stats
+
+### Single Sign-On (SSO)
+
+- `POST /api/projects/[id]/sso/configure` - Configure SSO provider
+- `GET /api/projects/[id]/sso/config` - Get SSO configuration
+- `POST /api/auth/sso/authorize` - Initiate SSO flow
+- `POST /api/auth/sso/callback` - Handle SSO callback
+- `POST /api/auth/sso/logout` - Logout from SSO session
+
+### Email Notifications
+
+- `POST /api/projects/[id]/email-templates` - Create email template
+- `GET /api/projects/[id]/email-templates` - List email templates
+- `PUT /api/projects/[id]/email-templates/[templateId]` - Update email template
+- `POST /api/projects/[id]/email-send` - Send email
+- `GET /api/users/email-preferences` - Get user notification preferences
+- `PUT /api/users/email-preferences` - Update user notification preferences
+
+### Webhooks
+
+- `POST /api/projects/[id]/webhooks` - Create webhook endpoint
+- `GET /api/projects/[id]/webhooks` - List webhooks
+- `PUT /api/projects/[id]/webhooks/[webhookId]` - Update webhook
+- `DELETE /api/projects/[id]/webhooks/[webhookId]` - Delete webhook
+- `POST /api/projects/[id]/webhooks/[webhookId]/test` - Send test webhook
+- `GET /api/projects/[id]/webhooks/[webhookId]/deliveries` - Delivery logs
+- `POST /api/webhooks/events` - Trigger webhook events (admin/internal)
+
+### Guest Authentication
+
+- `POST /api/projects/[id]/guest-access` - Create guest access token
+- `GET /api/projects/[id]/guest-access` - List active guest sessions
+- `DELETE /api/projects/[id]/guest-access/[sessionId]` - Revoke guest access
+- `POST /api/auth/guest/verify` - Verify and use guest token
+
+---
+
 ## Support
 
 For issues or questions about the API, please refer to the main [README.md](./README.md) or open an issue in the repository.

@@ -7,7 +7,7 @@ interface LogUsageParams {
   service: AIService;
   tokensOrCredits: number;
   endpoint: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 const COST_RATES = {
@@ -19,12 +19,17 @@ const COST_RATES = {
   firecrawl: parseFloat(process.env.FIRECRAWL_CREDIT_COST || '0.01'),
 };
 
-function calculateCost(service: AIService, tokensOrCredits: number, metadata?: Record<string, any>): number {
+function calculateCost(
+  service: AIService,
+  tokensOrCredits: number,
+  metadata?: Record<string, unknown>
+): number {
   switch (service) {
-    case 'gemini':
-      const inputTokens = metadata?.inputTokens || 0;
-      const outputTokens = metadata?.outputTokens || 0;
-      return (inputTokens * COST_RATES.gemini.input) + (outputTokens * COST_RATES.gemini.output);
+    case 'gemini': {
+      const inputTokens = typeof metadata?.inputTokens === 'number' ? metadata.inputTokens : 0;
+      const outputTokens = typeof metadata?.outputTokens === 'number' ? metadata.outputTokens : 0;
+      return inputTokens * COST_RATES.gemini.input + outputTokens * COST_RATES.gemini.output;
+    }
     case 'deepseek':
       return tokensOrCredits * COST_RATES.deepseek;
     case 'firecrawl':

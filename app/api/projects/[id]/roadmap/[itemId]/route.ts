@@ -18,14 +18,21 @@ export async function PUT(
     const validated = updateRoadmapItemSchema.parse(body);
     
     const adminClient = createAdminClient();
-    
-    const updateData: any = {};
+
+    const updateData: Partial<{
+      title: string;
+      description: string | null;
+      status: 'planned' | 'in_progress' | 'completed' | 'cancelled';
+      priority: 'low' | 'medium' | 'high' | 'critical';
+      cluster_id: string | null;
+    }> = {};
+
     if (validated.title !== undefined) updateData.title = validated.title;
     if (validated.description !== undefined) updateData.description = validated.description;
     if (validated.status !== undefined) updateData.status = validated.status;
     if (validated.priority !== undefined) updateData.priority = validated.priority;
     if (validated.clusterId !== undefined) updateData.cluster_id = validated.clusterId;
-    
+
     const { data: item, error } = await adminClient
       .from('roadmap_items')
       .update(updateData)

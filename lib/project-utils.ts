@@ -1,5 +1,5 @@
 import { createAdminClient } from './supabase';
-import { Project, Plan } from '@/types';
+import { Plan, Project, UserRole } from '@/types';
 
 const PLAN_LIMITS = {
   free: parseInt(process.env.PLAN_FREE_FEEDBACK_LIMIT || '50'),
@@ -22,6 +22,32 @@ export async function getProjectWithOwnership(projectId: string, userId: string)
 
   if (project.user_id !== userId) {
     throw new Error('Forbidden: You do not own this project');
+  }
+
+  return project;
+}
+
+/**
+ * Returns the project if the requesting user is the owner or a platform admin.
+ */
+export async function getProjectWithAccess(
+  projectId: string,
+  user: { id: string; role: UserRole }
+): Promise<Project> {
+  const adminClient = createAdminClient();
+
+  const { data: project, error } = await adminClient
+    .from('projects')
+    .select('*')
+    .eq('id', projectId)
+    .single();
+
+  if (error || !project) {
+    throw new Error('Project not found');
+  }
+
+  if (user.role !== 'admin' && project.user_id !== user.id) {
+    throw new Error('Forbidden: You do not have access to this project');
   }
 
   return project;
