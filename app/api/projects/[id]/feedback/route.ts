@@ -37,7 +37,11 @@ export async function POST(
         source_type: validated.sourceType || 'manual',
         source_url: validated.sourceUrl || null,
       })
-      .select()
+      .select(`
+        *,
+        status:feedback_statuses(*),
+        topics:topics(*)
+      `)
       .single();
     
     if (error) {
@@ -49,7 +53,11 @@ export async function POST(
     return NextResponse.json(
       {
         success: true,
-        data: feedback,
+        data: {
+          ...feedback,
+          user_has_voted: false,
+          user_is_following: false
+        },
       },
       { headers: getRateLimitHeaders(rateLimitResult) }
     );
@@ -80,7 +88,11 @@ export async function GET(
     
     let queryBuilder = adminClient
       .from('feedback_items')
-      .select('*', { count: 'exact' })
+      .select(`
+        *,
+        status:feedback_statuses(*),
+        topics:topics(*)
+      `, { count: 'exact' })
       .eq('project_id', projectId)
       .is('deleted_at', null)
       .order('created_at', { ascending: false });
@@ -100,18 +112,42 @@ export async function GET(
     const offset = (query.page - 1) * query.limit;
     queryBuilder = queryBuilder.range(offset, offset + query.limit - 1);
     
-    const { data: feedback, count, error } = await queryBuilder;
+    const { data: feedbackItems, count, error } = await queryBuilder;
     
     if (error) {
       throw new Error('Failed to fetch feedback');
     }
+
+    // Get user's vote and follow status for these items
+    const feedbackIds = feedbackItems?.map(f => f.id) || [];
+    
+    const { data: userVotes } = await adminClient
+      .from('feedback_votes')
+      .select('feedback_id')
+      .eq('user_id', user.id)
+      .in('feedback_id', feedbackIds);
+
+    const { data: userFollows } = await adminClient
+      .from('feedback_followers')
+      .select('feedback_id')
+      .eq('user_id', user.id)
+      .in('feedback_id', feedbackIds);
+
+    const votedIds = new Set(userVotes?.map(v => v.feedback_id));
+    const followedIds = new Set(userFollows?.map(f => f.feedback_id));
+
+    const enrichedFeedback = feedbackItems?.map(f => ({
+      ...f,
+      user_has_voted: votedIds.has(f.id),
+      user_is_following: followedIds.has(f.id)
+    }));
     
     await updateLastActive(user.id);
     
     return NextResponse.json({
       success: true,
       data: {
-        data: feedback || [],
+        data: enrichedFeedback || [],
         total: count || 0,
         page: query.page,
         limit: query.limit,
