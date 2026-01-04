@@ -38,7 +38,11 @@ export async function POST(
     const { data: createdFeedback, error } = await adminClient
       .from('feedback_items')
       .insert(feedbackItems)
-      .select();
+      .select(`
+        *,
+        status:feedback_statuses(*),
+        topics:topics(*)
+      `);
     
     if (error) {
       throw new Error('Failed to create feedback items from scraped content');
@@ -61,12 +65,18 @@ export async function POST(
       }))
     );
     
+    const enrichedFeedback = createdFeedback?.map(f => ({
+      ...f,
+      user_has_voted: false,
+      user_is_following: false
+    }));
+    
     return NextResponse.json({
       success: true,
       data: {
         feedbackCount: createdFeedback?.length || 0,
         creditsUsed: totalCredits,
-        feedback: createdFeedback,
+        feedback: enrichedFeedback || [],
       },
     });
   } catch (error) {

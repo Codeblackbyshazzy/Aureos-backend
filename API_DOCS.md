@@ -227,6 +227,362 @@ Soft delete a feedback item.
 
 ---
 
+## Voting System
+
+### POST `/api/projects/[id]/feedback/[feedbackId]/vote`
+
+Vote for a feedback item.
+
+**Auth**: Required
+
+**Response**:
+```json
+{
+  "success": true,
+  "feedback": {
+    "id": "uuid",
+    "vote_count": 5,
+    ...
+  },
+  "userHasVoted": true
+}
+```
+
+---
+
+### DELETE `/api/projects/[id]/feedback/[feedbackId]/vote`
+
+Remove a vote from a feedback item.
+
+**Auth**: Required
+
+**Response**:
+```json
+{
+  "success": true,
+  "feedback": {
+    "id": "uuid",
+    "vote_count": 4,
+    ...
+  },
+  "userHasVoted": false
+}
+```
+
+---
+
+### GET `/api/projects/[id]/feedback/[feedbackId]/votes`
+
+Get paginated list of votes for a feedback item.
+
+**Auth**: Required
+
+**Query Parameters**:
+- `page` (optional, default: 1)
+- `limit` (optional, default: 20)
+
+**Response**:
+```json
+{
+  "success": true,
+  "votes": [
+    {
+      "id": "uuid",
+      "user": { "id": "uuid", "email": "user@example.com" },
+      "created_at": "2024-01-04T12:00:00.000Z"
+    }
+  ],
+  "total": 5
+}
+```
+
+---
+
+## Comments & Discussions
+
+### POST `/api/projects/[id]/feedback/[feedbackId]/comments`
+
+Add a comment to a feedback item.
+
+**Auth**: Required
+
+**Request Body**:
+```json
+{
+  "text": "Great idea!",
+  "parentCommentId": "uuid" (optional)
+}
+```
+
+**Response**:
+```json
+{
+  "success": true,
+  "comment": {
+    "id": "uuid",
+    "text": "Great idea!",
+    "user_id": "uuid",
+    "created_at": "..."
+  }
+}
+```
+
+---
+
+### GET `/api/projects/[id]/feedback/[feedbackId]/comments`
+
+Get comments for a feedback item with nested replies.
+
+**Auth**: Required
+
+**Query Parameters**:
+- `page` (optional, default: 1, top-level comments only)
+- `limit` (optional, default: 20)
+- `sort` (optional): `newest` or `oldest`
+
+**Response**:
+```json
+{
+  "success": true,
+  "comments": [
+    {
+      "id": "uuid",
+      "text": "Top level comment",
+      "user": { "id": "uuid", "email": "..." },
+      "replies": [
+        { "id": "uuid", "text": "Reply", ... }
+      ]
+    }
+  ],
+  "total": 10
+}
+```
+
+---
+
+### PUT `/api/comments/[commentId]`
+
+Update a comment.
+
+**Auth**: Required (author or admin)
+
+**Request Body**:
+```json
+{
+  "text": "Updated text"
+}
+```
+
+**Response**:
+```json
+{
+  "success": true,
+  "comment": {...}
+}
+```
+
+---
+
+### DELETE `/api/comments/[commentId]`
+
+Soft delete a comment.
+
+**Auth**: Required (author or admin)
+
+**Response**:
+```json
+{
+  "success": true
+}
+```
+
+---
+
+## Follow/Subscriber System
+
+### POST `/api/projects/[id]/feedback/[feedbackId]/follow`
+
+Follow a feedback item for updates.
+
+**Auth**: Required
+
+**Response**:
+```json
+{
+  "success": true,
+  "isFollowing": true,
+  "followerCount": 10
+}
+```
+
+---
+
+### DELETE `/api/projects/[id]/feedback/[feedbackId]/follow`
+
+Unfollow a feedback item.
+
+**Auth**: Required
+
+**Response**:
+```json
+{
+  "success": true,
+  "isFollowing": false,
+  "followerCount": 9
+}
+```
+
+---
+
+### GET `/api/projects/[id]/feedback/[feedbackId]/followers`
+
+Get list of followers for a feedback item.
+
+**Auth**: Required
+
+**Response**:
+```json
+{
+  "success": true,
+  "followers": [...],
+  "total": 10
+}
+```
+
+---
+
+## Topics/Categories
+
+### POST `/api/projects/[id]/topics`
+
+Create a new topic for a project.
+
+**Auth**: Required (project owner)
+
+**Request Body**:
+```json
+{
+  "name": "Billing",
+  "color": "#FF0000",
+  "icon": "💰"
+}
+```
+
+**Response**:
+```json
+{
+  "success": true,
+  "topic": {...}
+}
+```
+
+---
+
+### GET `/api/projects/[id]/topics`
+
+Get all topics for a project.
+
+**Auth**: Required
+
+**Response**:
+```json
+{
+  "success": true,
+  "topics": [...]
+}
+```
+
+---
+
+### POST `/api/projects/[id]/feedback/[feedbackId]/topics`
+
+Assign topics to a feedback item.
+
+**Auth**: Required (project owner)
+
+**Request Body**:
+```json
+{
+  "topicIds": ["uuid1", "uuid2"]
+}
+```
+
+**Response**:
+```json
+{
+  "success": true,
+  "topics": [...]
+}
+```
+
+---
+
+## Custom Status System
+
+### POST `/api/projects/[id]/statuses`
+
+Create a new status for a project.
+
+**Auth**: Required (project owner)
+
+**Request Body**:
+```json
+{
+  "name": "Under Review",
+  "color": "#FFFF00",
+  "display_order": 1
+}
+```
+
+**Response**:
+```json
+{
+  "success": true,
+  "status": {...}
+}
+```
+
+---
+
+### GET `/api/projects/[id]/statuses`
+
+Get all statuses for a project.
+
+**Auth**: Required
+
+**Response**:
+```json
+{
+  "success": true,
+  "statuses": [...]
+}
+```
+
+---
+
+### PUT `/api/projects/[id]/feedback/[feedbackId]/status`
+
+Update the status of a feedback item.
+
+**Auth**: Required (project owner)
+
+**Request Body**:
+```json
+{
+  "statusId": "uuid"
+}
+```
+
+**Response**:
+```json
+{
+  "success": true,
+  "feedback": {...}
+}
+```
+
+---
+
 ## AI Clustering & Prioritization
 
 ### POST `/api/projects/[id]/cluster`

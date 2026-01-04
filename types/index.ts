@@ -46,6 +46,10 @@ export interface FeedbackItem {
   created_at: string;
   metadata: Record<string, any> | null;
   deleted_at: string | null;
+  vote_count: number;
+  follower_count: number;
+  comment_count: number;
+  status_id: string | null;
 }
 
 export interface FeedbackCluster {
@@ -96,6 +100,66 @@ export interface Subscription {
   current_period_end: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface Vote {
+  id: string;
+  feedback_id: string;
+  user_id: string;
+  created_at: string;
+}
+
+export interface Comment {
+  id: string;
+  feedback_id: string;
+  project_id: string;
+  user_id: string | null;
+  user_name?: string;
+  user_email?: string;
+  text: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at?: string | null;
+  parent_comment_id?: string | null;
+}
+
+export interface Follower {
+  id: string;
+  feedback_id: string;
+  user_id: string;
+  created_at: string;
+}
+
+export interface Topic {
+  id: string;
+  project_id: string;
+  name: string;
+  color?: string | null;
+  icon?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FeedbackStatus {
+  id: string;
+  project_id: string;
+  name: string;
+  color: string;
+  icon?: string | null;
+  display_order: number;
+  is_default: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FeedbackItemExtended extends FeedbackItem {
+  vote_count: number;
+  follower_count: number;
+  comment_count: number;
+  topics: Topic[];
+  status: FeedbackStatus | null;
+  user_has_voted: boolean;
+  user_is_following: boolean;
 }
 
 // API Response Types
