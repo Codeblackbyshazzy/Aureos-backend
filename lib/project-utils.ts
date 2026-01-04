@@ -83,3 +83,49 @@ export async function getUserPlan(userId: string): Promise<Plan> {
 
   return project?.plan || 'free';
 }
+
+export async function checkPlanLimit(userId: string, feature: string): Promise<{ allowed: boolean; message?: string }> {
+  const plan = await getUserPlan(userId);
+
+  // Define feature access by plan
+  const featureAccess = {
+    polls: { free: false, starter: true, pro: true },
+    ai_analysis: { free: false, starter: true, pro: true },
+    custom_domains: { free: false, starter: false, pro: true },
+    advanced_search: { free: false, starter: true, pro: true },
+    websocket: { free: false, starter: true, pro: true },
+    rbac: { free: false, starter: false, pro: true }
+  };
+
+  const access = featureAccess[feature as keyof typeof featureAccess];
+  if (!access) {
+    return { allowed: true }; // Unknown feature, allow by default
+  }
+
+  const allowed = access[plan];
+  if (!allowed) {
+    const planNames = {
+      free: 'Free',
+      starter: 'Starter', 
+      pro: 'Pro'
+    };
+
+    const featureNames = {
+      polls: 'Idea Polls',
+      ai_analysis: 'AI Analysis',
+      custom_domains: 'Custom Domains',
+      advanced_search: 'Advanced Search',
+      websocket: 'Real-time Collaboration',
+      rbac: 'Team Management'
+    };
+
+    const requiredPlan = plan === 'free' ? 'Starter' : plan === 'starter' ? 'Pro' : 'Pro';
+    
+    return {
+      allowed: false,
+      message: `${featureNames[feature as keyof typeof featureNames]} requires a ${requiredPlan} plan. Please upgrade your subscription.`
+    };
+  }
+
+  return { allowed: true };
+}
