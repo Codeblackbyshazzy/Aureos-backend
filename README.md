@@ -1,3 +1,8 @@
+🚨 [Check live project status & latest drops here](STATUS.md) 🚨
+
+[![Build Status](https://img.shields.io/badge/status-under%20construction🚧-yellow)]()
+[![Updates](https://img.shields.io/badge/updates-today%20🔥-brightgreen)]()
+[![Fun](https://img.shields.io/badge/vibe-building%20in%20public%20⚡-blue)]()
 # Aureos Backend API
 
 Production-ready backend system for Aureos that enables indie hackers to collect feedback, cluster it using AI, and build public roadmaps. Includes a comprehensive admin backend for monitoring subscriptions, users, and API usage.
