@@ -22,8 +22,21 @@ export interface ErrorResponse {
   retryAfter?: number;
 }
 
+export class RateLimitError extends Error {
+  public readonly resetAt: number;
+
+  constructor(resetAt: number) {
+    super('Rate limit exceeded');
+    this.resetAt = resetAt;
+  }
+}
+
 export function handleError(error: unknown): NextResponse<ErrorResponse> {
   console.error('API Error:', error);
+
+  if (error instanceof RateLimitError) {
+    return createRateLimitResponse(error.resetAt);
+  }
 
   // Validation errors
   if (error instanceof ZodError) {

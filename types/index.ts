@@ -44,7 +44,7 @@ export interface FeedbackItem {
   source_url: string | null;
   sentiment: Sentiment | null;
   created_at: string;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
   deleted_at: string | null;
   vote_count: number;
   follower_count: number;
@@ -85,7 +85,7 @@ export interface ApiUsageLog {
   cost_estimate: number;
   endpoint: string;
   timestamp: string;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
 }
 
 export interface Subscription {
@@ -162,9 +162,181 @@ export interface FeedbackItemExtended extends FeedbackItem {
   user_is_following: boolean;
 }
 
+// Phase 2 Models
+
+export type AnnouncementStatus = 'draft' | 'scheduled' | 'published';
+
+export interface AnnouncementCategory {
+  id: string;
+  project_id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  created_by: string | null;
+  updated_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Announcement {
+  id: string;
+  project_id: string;
+  category_id: string | null;
+  title: string;
+  content: string;
+  status: AnnouncementStatus;
+  scheduled_for: string | null;
+  published_at: string | null;
+  created_by: string | null;
+  updated_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AnnouncementSubscriber {
+  id: string;
+  project_id: string;
+  user_id: string;
+  subscribed_at: string;
+  unsubscribed_at: string | null;
+}
+
+export interface AnnouncementRead {
+  id: string;
+  announcement_id: string;
+  user_id: string;
+  read_at: string;
+}
+
+export type SsoProviderType = 'oidc' | 'saml';
+
+export interface SsoConfiguration {
+  id: string;
+  project_id: string;
+  provider_type: SsoProviderType;
+  name: string;
+  enabled: boolean;
+  oidc_issuer_url: string | null;
+  oidc_client_id: string | null;
+  oidc_client_secret: string | null;
+  oidc_redirect_url: string | null;
+  oidc_scopes: string[];
+  saml_entity_id: string | null;
+  saml_sso_url: string | null;
+  saml_certificate: string | null;
+  attribute_mapping: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SsoSession {
+  id: string;
+  project_id: string;
+  provider_type: SsoProviderType;
+  status: 'pending' | 'active' | 'revoked';
+  state: string;
+  nonce: string | null;
+  code_verifier: string | null;
+  external_user_id: string | null;
+  email: string | null;
+  user_id: string | null;
+  created_at: string;
+  expires_at: string;
+  last_active_at: string | null;
+  revoked_at: string | null;
+}
+
+export interface EmailTemplate {
+  id: string;
+  project_id: string;
+  name: string;
+  subject: string;
+  body_html: string | null;
+  body_text: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface EmailLog {
+  id: string;
+  project_id: string;
+  template_id: string | null;
+  to_email: string;
+  to_user_id: string | null;
+  subject: string;
+  provider: string;
+  provider_message_id: string | null;
+  status: 'sent' | 'failed';
+  error_message: string | null;
+  attempt_count: number;
+  sent_at: string | null;
+  created_at: string;
+}
+
+export interface EmailPreferences {
+  id: string;
+  user_id: string;
+  announcements_enabled: boolean;
+  feedback_enabled: boolean;
+  marketing_enabled: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WebhookEvent {
+  id: string;
+  name: string;
+  description: string | null;
+  created_at: string;
+}
+
+export interface Webhook {
+  id: string;
+  project_id: string;
+  url: string;
+  secret: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WebhookDeliveryLog {
+  id: string;
+  webhook_id: string;
+  event_name: string;
+  payload: Record<string, unknown>;
+  status_code: number | null;
+  success: boolean;
+  attempt: number;
+  error_message: string | null;
+  delivered_at: string | null;
+  next_retry_at: string | null;
+  created_at: string;
+}
+
+export interface GuestSession {
+  id: string;
+  project_id: string;
+  created_by: string | null;
+  permissions: string[];
+  one_time: boolean;
+  expires_at: string;
+  used_at: string | null;
+  revoked_at: string | null;
+  created_at: string;
+}
+
+export interface GuestAccessToken {
+  id: string;
+  session_id: string;
+  token_hash: string;
+  created_at: string;
+  last_used_at: string | null;
+}
+
 // API Response Types
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;

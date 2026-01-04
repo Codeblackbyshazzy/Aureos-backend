@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Comment } from '@/types';
 import { requireAuth } from '@/lib/auth';
 import { handleError } from '@/lib/errors';
 import { createServerClient } from '@/lib/supabase';
@@ -125,7 +126,7 @@ export async function GET(
 
     if (fetchError) throw fetchError;
 
-    const thread = await buildCommentThread(allComments as any);
+    const thread = await buildCommentThread((allComments ?? []) as unknown as Comment[]);
     
     // Filter thread to only include the paginated top-level comments
     const paginatedThread = thread.filter(c => ids.includes(c.id));

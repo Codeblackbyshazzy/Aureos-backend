@@ -26,15 +26,25 @@ export async function GET(
 
     if (error) throw error;
 
+    type FollowerRow = {
+      id: string;
+      created_at: string;
+      user: { id: string; email: string } | null;
+    };
+
+    const safeFollowers = (followers ?? []) as unknown as FollowerRow[];
+
     return NextResponse.json({
       success: true,
-      followers: (followers || []).map((f: any) => ({
-        id: f.user.id,
-        email: f.user.email,
-        name: f.user.name,
-        followedAt: f.created_at
-      })),
-      total: count || 0
+      followers: safeFollowers
+        .filter(f => f.user)
+        .map(f => ({
+          id: f.user!.id,
+          email: f.user!.email,
+          name: null,
+          followedAt: f.created_at,
+        })),
+      total: count || 0,
     });
   } catch (error) {
     return handleError(error);
