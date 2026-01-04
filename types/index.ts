@@ -521,3 +521,192 @@ export interface ProjectContext extends AuthContext {
   projectId: string;
   project: Project;
 }
+
+// Phase 4: Extended Types
+
+export type PollStatus = 'active' | 'closed' | 'draft';
+
+export interface IdeaPoll {
+  id: string;
+  project_id: string;
+  title: string;
+  description: string | null;
+  status: PollStatus;
+  created_at: string;
+  closed_at: string | null;
+  created_by: string;
+}
+
+export interface PollOption {
+  id: string;
+  poll_id: string;
+  option_text: string;
+  display_order: number;
+  created_at: string;
+}
+
+export interface PollVote {
+  id: string;
+  poll_id: string;
+  option_id: string;
+  user_id: string;
+  created_at: string;
+}
+
+export interface PollResults {
+  poll: IdeaPoll;
+  options: Array<PollOption & {
+    vote_count: number;
+    percentage: number;
+    user_voted?: boolean;
+  }>;
+  total_votes: number;
+  user_has_voted: boolean;
+}
+
+export interface CustomDomain {
+  custom_domain: string;
+  domain_verified: boolean;
+  domain_verification_token: string | null;
+  domain_verified_at: string | null;
+}
+
+export interface ProjectRole {
+  id: string;
+  project_id: string;
+  name: string;
+  permissions: Record<string, boolean>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProjectMember {
+  id: string;
+  project_id: string;
+  user_id: string;
+  role_id: string | null;
+  created_at: string;
+  updated_at: string;
+  user: {
+    id: string;
+    email: string;
+  };
+  role: ProjectRole | null;
+}
+
+export interface SearchFilters {
+  sentiment?: Sentiment[];
+  sourceType?: SourceType[];
+  status?: string[];
+  dateFrom?: string;
+  dateTo?: string;
+  hasComments?: boolean;
+  hasVotes?: boolean;
+  minVotes?: number;
+}
+
+export interface SearchResult extends FeedbackItem {
+  search_rank: number;
+  highlighted_text: string;
+}
+
+export interface SentimentAnalysis {
+  id: string;
+  feedback_id: string;
+  sentiment: Sentiment;
+  confidence: number;
+  keywords: string[];
+  created_at: string;
+}
+
+export interface TopicAuto {
+  id: string;
+  project_id: string;
+  feedback_id: string;
+  topic_name: string;
+  confidence: number;
+  created_at: string;
+}
+
+// Request/Response Types for Phase 4
+
+export interface CreatePollRequest {
+  title: string;
+  description?: string;
+  options: string[];
+  status?: PollStatus;
+}
+
+export interface UpdatePollRequest {
+  title?: string;
+  description?: string;
+  status?: PollStatus;
+  closed_at?: string;
+}
+
+export interface VoteRequest {
+  option_id: string;
+}
+
+export interface CustomDomainRequest {
+  domain: string;
+}
+
+export interface VerifyDomainRequest {
+  verification_token: string;
+}
+
+export interface AddMemberRequest {
+  user_id: string;
+  role_id: string;
+}
+
+export interface UpdateMemberRoleRequest {
+  role_id: string;
+}
+
+export interface SearchRequest {
+  query: string;
+  filters?: SearchFilters;
+  page?: number;
+  limit?: number;
+}
+
+export interface SearchResponse {
+  results: SearchResult[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  facets: {
+    sentiments: Array<{ value: Sentiment; count: number }>;
+    sourceTypes: Array<{ value: SourceType; count: number }>;
+    dateRange: {
+      min: string;
+      max: string;
+    };
+  };
+}
+
+export interface SentimentAnalysisRequest {
+  feedback_ids: string[];
+}
+
+export interface AutoCategorizeRequest {
+  feedback_ids: string[];
+}
+
+// WebSocket Types
+export interface WebSocketMessage {
+  type: 'feedback:created' | 'feedback:voted' | 'comment:added' | 'status:changed' | 'user:online' | 'user:offline' | 'poll:created' | 'poll:voted';
+  payload: any;
+  timestamp: string;
+  user_id: string;
+}
+
+export interface ProjectPresence {
+  user_id: string;
+  email: string;
+  last_seen: string;
+  is_online: boolean;
+}
