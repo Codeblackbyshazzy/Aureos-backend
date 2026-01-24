@@ -22,10 +22,10 @@ export interface EmailPreferencesRecord {
   updated_at: string;
 }
 
-function renderTemplate(input: string, variables: Record<string, string>): string {
+function renderTemplate(input: string, variables: Record<string, unknown>): string {
   return input.replace(/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/g, (_, key: string) => {
     const value = variables[key];
-    return value ?? '';
+    return value != null ? String(value) : '';
   });
 }
 
@@ -201,7 +201,7 @@ export async function sendEmail(params: {
   subject?: string;
   html?: string;
   text?: string;
-  variables: Record<string, string>;
+  variables?: Record<string, unknown>;
 }): Promise<{ providerMessageId: string }>
 {
   const adminClient = createAdminClient();
@@ -240,9 +240,11 @@ export async function sendEmail(params: {
     throw new Error('Missing email body');
   }
 
-  const renderedSubject = renderTemplate(subject, params.variables);
-  const renderedHtml = html ? renderTemplate(html, params.variables) : undefined;
-  const renderedText = text ? renderTemplate(text, params.variables) : undefined;
+  const variables = params.variables ?? {};
+
+  const renderedSubject = renderTemplate(subject, variables);
+  const renderedHtml = html ? renderTemplate(html, variables) : undefined;
+  const renderedText = text ? renderTemplate(text, variables) : undefined;
 
   const provider = process.env.SENDGRID_API_KEY ? 'sendgrid' : 'resend';
 

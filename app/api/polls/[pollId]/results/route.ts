@@ -10,7 +10,7 @@ export async function GET(
 ) {
   try {
     const { pollId } = params;
-    const user = await requireAuth(request);
+    const user = await requireAuth();
 
     // Get poll to verify user has access
     const supabase = createServerClient();
@@ -27,12 +27,12 @@ export async function GET(
       .from('projects')
       .select('id')
       .eq('id', poll.project_id)
-      .eq('user_id', user.userId)
+      .eq('user_id', user.id)
       .single();
 
     if (projectError) throw projectError;
 
-    const results = await getPollResults(pollId, user.userId);
+    const results = await getPollResults(pollId, user.id);
 
     return NextResponse.json({
       success: true,

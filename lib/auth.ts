@@ -1,4 +1,5 @@
 import { headers } from 'next/headers';
+import { NextRequest } from 'next/server';
 import { createAdminClient, createServerClient } from './supabase';
 import { User, UserRole } from '@/types';
 import { verifyInternalAccessToken } from '@/lib/internal-auth';
@@ -145,4 +146,32 @@ export async function updateLastActive(userId: string): Promise<void> {
     .from('users')
     .update({ last_active_at: new Date().toISOString() })
     .eq('id', userId);
+}
+
+/**
+ * Returns authenticated user with project access verification.
+ * Checks both authentication and project ownership/admin access.
+ */
+export async function requireProjectAccess(
+  request: NextRequest,
+  projectId: string
+): Promise<User> {
+  const user = await requireAuth();
+  const adminClient = createAdminClient();
+
+  const { data: project } = await adminClient
+    .from('projects')
+    .select('user_id')
+    .eq('id', projectId)
+    .single();
+
+  if (!project) {
+    throw new Error('Project not found');
+  }
+
+  if (user.role !== 'admin' && project.user_id !== user.id) {
+    throw new Error('Forbidden: You do not have access to this project');
+  }
+
+  return user;
 }

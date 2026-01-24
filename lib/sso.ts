@@ -65,7 +65,7 @@ export async function upsertSsoConfiguration(params: {
   providerType: SsoProviderType;
   name: string;
   enabled: boolean;
-  attributeMapping: Record<string, string>;
+  attributeMapping: Record<string, unknown>;
   oidc?: {
     issuerUrl: string;
     clientId: string;

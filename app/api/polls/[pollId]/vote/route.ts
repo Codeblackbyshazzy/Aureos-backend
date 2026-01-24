@@ -16,7 +16,7 @@ export async function POST(
 ) {
   try {
     const { pollId } = params;
-    const user = await requireAuth(request);
+    const user = await requireAuth();
 
     const body = await request.json();
     const validatedData = voteSchema.parse(body) as VoteRequest;
