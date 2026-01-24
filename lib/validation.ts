@@ -144,14 +144,14 @@ export const createSurveySchema = z.object({
   title: z.string().min(1, 'Title is required').max(200, 'Title too long'),
   description: z.string().max(1000, 'Description too long').optional(),
   status: z.enum(['draft', 'active', 'closed']).optional(),
-  settings: z.record(z.any()).optional()
+  settings: z.record(z.string(), z.any()).optional()
 });
 
 export const updateSurveySchema = z.object({
   title: z.string().min(1, 'Title is required').max(200, 'Title too long').optional(),
   description: z.string().max(1000, 'Description too long').optional(),
   status: z.enum(['draft', 'active', 'closed']).optional(),
-  settings: z.record(z.any()).optional(),
+  settings: z.record(z.string(), z.any()).optional(),
   closed_at: z.string().datetime().optional()
 });
 
@@ -174,21 +174,21 @@ export const submitSurveyResponseSchema = z.object({
     answer_text: z.string().optional(),
     answer_value: z.any().optional()
   })).min(1, 'At least one answer required'),
-  metadata: z.record(z.any()).optional()
+  metadata: z.record(z.string(), z.any()).optional()
 });
 
 // Integration Schemas
 export const configureIntegrationSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name too long'),
-  config: z.record(z.any()).default({}),
-  credentials: z.record(z.any()).default({}),
+  config: z.record(z.string(), z.any()).default({}),
+  credentials: z.record(z.string(), z.any()).default({}),
   is_active: z.boolean().optional()
 });
 
 export const updateIntegrationSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name too long').optional(),
-  config: z.record(z.any()).optional(),
-  credentials: z.record(z.any()).optional(),
+  config: z.record(z.string(), z.any()).optional(),
+  credentials: z.record(z.string(), z.any()).optional(),
   is_active: z.boolean().optional()
 });
 
@@ -197,7 +197,7 @@ export const analyticsQuerySchema = z.object({
   startDate: z.string().datetime().optional(),
   endDate: z.string().datetime().optional(),
   metric: z.string().optional(),
-  dimensions: z.record(z.any()).optional()
+  dimensions: z.record(z.string(), z.any()).optional()
 });
 
 export const createCustomMetricSchema = z.object({
@@ -220,7 +220,7 @@ export const createDashboardWidgetSchema = z.object({
   widget_type: z.enum(['metric', 'chart', 'table', 'list']),
   metric_name: z.string().optional(),
   custom_metric_id: z.string().uuid().optional(),
-  configuration: z.record(z.any()).default({}),
+  configuration: z.record(z.string(), z.any()).default({}),
   position_x: z.number().int().min(0).optional(),
   position_y: z.number().int().min(0).optional(),
   width: z.number().int().min(1).max(12).optional(),
@@ -232,7 +232,7 @@ export const updateDashboardWidgetSchema = z.object({
   widget_type: z.enum(['metric', 'chart', 'table', 'list']).optional(),
   metric_name: z.string().optional(),
   custom_metric_id: z.string().uuid().optional(),
-  configuration: z.record(z.any()).optional(),
+  configuration: z.record(z.string(), z.any()).optional(),
   position_x: z.number().int().min(0).optional(),
   position_y: z.number().int().min(0).optional(),
   width: z.number().int().min(1).max(12).optional(),

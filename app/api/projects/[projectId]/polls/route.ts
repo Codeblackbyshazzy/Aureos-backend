@@ -12,7 +12,7 @@ const createPollSchema = z.object({
   options: z.array(z.string().min(1).max(500)).min(2).max(10),
   status: z.enum(['active', 'closed', 'draft']).optional(),
   type: z.enum(['single_choice', 'multiple_choice', 'ranking']).optional(),
-  settings: z.record(z.any()).optional(),
+  settings: z.record(z.string(), z.any()).optional(),
   is_anonymous: z.boolean().optional(),
   allow_retraction: z.boolean().optional()
 });
