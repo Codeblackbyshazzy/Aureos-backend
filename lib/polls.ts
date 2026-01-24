@@ -8,7 +8,11 @@ export async function createPoll(
   title: string,
   description: string | null,
   options: string[],
-  status: 'active' | 'closed' | 'draft' = 'active'
+  status: 'active' | 'closed' | 'draft' = 'active',
+  type: 'single_choice' | 'multiple_choice' | 'ranking' = 'single_choice',
+  settings: Record<string, unknown> = {},
+  is_anonymous: boolean = false,
+  allow_retraction: boolean = true
 ) {
   const supabase = createAdminClient();
 
@@ -20,6 +24,10 @@ export async function createPoll(
       title,
       description,
       status,
+      type,
+      settings,
+      is_anonymous,
+      allow_retraction,
       created_by: userId
     })
     .select()
@@ -141,6 +149,10 @@ export async function updatePoll(
     title?: string;
     description?: string;
     status?: 'active' | 'closed' | 'draft';
+    type?: 'single_choice' | 'multiple_choice' | 'ranking';
+    settings?: Record<string, unknown>;
+    is_anonymous?: boolean;
+    allow_retraction?: boolean;
     closed_at?: string | null;
   }
 ) {
@@ -177,7 +189,7 @@ export async function voteOnPoll(pollId: string, optionId: string, userId: strin
   // Check if poll is active
   const { data: poll, error: pollError } = await supabase
     .from('idea_polls')
-    .select('status')
+    .select('project_id, status, closed_at')
     .eq('id', pollId)
     .single();
 
@@ -185,6 +197,10 @@ export async function voteOnPoll(pollId: string, optionId: string, userId: strin
 
   if (poll.status !== 'active') {
     throw new Error('Poll is not active');
+  }
+
+  if (poll.closed_at && new Date(poll.closed_at) < new Date()) {
+    throw new Error('Poll has ended');
   }
 
   // Check if user has already voted
@@ -221,6 +237,16 @@ export async function voteOnPoll(pollId: string, optionId: string, userId: strin
 
     if (error) throw error;
     vote = data;
+  }
+
+  // Broadcast vote update via WebSocket
+  try {
+    const { wsManager, createPollVotedMessage } = await import('./websocket');
+    const results = await getPollResults(pollId, userId);
+    const message = createPollVotedMessage(pollId, optionId, userId, results);
+    wsManager.broadcastToProject(poll.project_id, message);
+  } catch (wsError) {
+    console.error('Failed to broadcast poll vote:', wsError);
   }
 
   return vote;

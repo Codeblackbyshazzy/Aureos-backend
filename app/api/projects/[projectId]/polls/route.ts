@@ -10,7 +10,11 @@ const createPollSchema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().optional(),
   options: z.array(z.string().min(1).max(500)).min(2).max(10),
-  status: z.enum(['active', 'closed', 'draft']).optional()
+  status: z.enum(['active', 'closed', 'draft']).optional(),
+  type: z.enum(['single_choice', 'multiple_choice', 'ranking']).optional(),
+  settings: z.record(z.any()).optional(),
+  is_anonymous: z.boolean().optional(),
+  allow_retraction: z.boolean().optional()
 });
 
 export async function POST(
@@ -25,7 +29,7 @@ export async function POST(
     const validatedData = createPollSchema.parse(body) as CreatePollRequest;
 
     // Check plan limits for polls
-    const limitCheck = await checkPlanLimit(user.userId, 'polls');
+    const limitCheck = await checkPlanLimit(user.id, 'polls');
     if (!limitCheck.allowed) {
       return NextResponse.json(
         { success: false, error: limitCheck.message },
@@ -35,11 +39,15 @@ export async function POST(
 
     const result = await createPoll(
       projectId,
-      user.userId,
+      user.id,
       validatedData.title,
       validatedData.description || null,
       validatedData.options,
-      validatedData.status || 'active'
+      validatedData.status || 'active',
+      validatedData.type || 'single_choice',
+      validatedData.settings || {},
+      validatedData.is_anonymous || false,
+      validatedData.allow_retraction ?? true
     );
 
     return NextResponse.json({
@@ -62,7 +70,7 @@ export async function GET(
     const { projectId } = params;
     const user = await requireProjectAccess(request, projectId);
 
-    const polls = await getPolls(projectId, user.userId);
+    const polls = await getPolls(projectId, user.id);
 
     return NextResponse.json({
       success: true,

@@ -51,6 +51,15 @@ export async function POST(
     // Increment count
     await incrementVoteCount(feedbackId, supabase);
 
+    // Broadcast via WebSocket
+    try {
+      const { wsManager, createFeedbackVotedMessage } = await import('@/lib/websocket');
+      const message = createFeedbackVotedMessage(feedbackId, user.id, (feedback.vote_count || 0) + 1);
+      wsManager.broadcastToProject(projectId, message);
+    } catch (wsError) {
+      console.error('Failed to broadcast vote:', wsError);
+    }
+
     return NextResponse.json({
       success: true,
       feedback: { ...feedback, vote_count: (feedback.vote_count || 0) + 1 },

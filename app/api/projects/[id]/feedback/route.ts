@@ -50,6 +50,15 @@ export async function POST(
     
     await updateLastActive(user.id);
     
+    // Broadcast via WebSocket
+    try {
+      const { wsManager, createFeedbackCreatedMessage } = await import('@/lib/websocket');
+      const message = createFeedbackCreatedMessage(feedback, user.id);
+      wsManager.broadcastToProject(projectId, message);
+    } catch (wsError) {
+      console.error('Failed to broadcast feedback creation:', wsError);
+    }
+    
     return NextResponse.json(
       {
         success: true,

@@ -57,6 +57,15 @@ export async function PUT(
 
     if (updateError) throw updateError;
 
+    // Broadcast via WebSocket
+    try {
+      const { wsManager, createStatusChangedMessage } = await import('@/lib/websocket');
+      const message = createStatusChangedMessage(feedbackId, updatedFeedback.status, user.id);
+      wsManager.broadcastToProject(projectId, message);
+    } catch (wsError) {
+      console.error('Failed to broadcast status change:', wsError);
+    }
+
     return NextResponse.json({
       success: true,
       feedback: updatedFeedback

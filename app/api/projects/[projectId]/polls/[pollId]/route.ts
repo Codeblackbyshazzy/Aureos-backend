@@ -9,7 +9,11 @@ const updatePollSchema = z.object({
   title: z.string().min(1).max(200).optional(),
   description: z.string().optional(),
   status: z.enum(['active', 'closed', 'draft']).optional(),
-  closed_at: z.string().datetime().optional()
+  type: z.enum(['single_choice', 'multiple_choice', 'ranking']).optional(),
+  settings: z.record(z.any()).optional(),
+  is_anonymous: z.boolean().optional(),
+  allow_retraction: z.boolean().optional(),
+  closed_at: z.string().datetime().optional().nullable()
 });
 
 export async function GET(
@@ -20,7 +24,7 @@ export async function GET(
     const { projectId, pollId } = params;
     const user = await requireProjectAccess(request, projectId);
 
-    const result = await getPollWithOptions(pollId, user.userId);
+    const result = await getPollWithOptions(pollId, user.id);
 
     return NextResponse.json({
       success: true,
@@ -42,7 +46,7 @@ export async function PUT(
     const body = await request.json();
     const validatedData = updatePollSchema.parse(body) as UpdatePollRequest;
 
-    const result = await updatePoll(pollId, user.userId, validatedData);
+    const result = await updatePoll(pollId, user.id, validatedData);
 
     return NextResponse.json({
       success: true,
@@ -61,7 +65,7 @@ export async function DELETE(
     const { projectId, pollId } = params;
     const user = await requireProjectAccess(request, projectId);
 
-    await deletePoll(pollId, user.userId);
+    await deletePoll(pollId, user.id);
 
     return NextResponse.json({
       success: true,
