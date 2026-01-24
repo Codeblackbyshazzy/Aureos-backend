@@ -7,7 +7,7 @@ import { CreateSearchFilterRequest } from '@/types';
 
 const filterSchema = z.object({
   name: z.string().min(1).max(100),
-  filter_config: z.record(z.any())
+  filter_config: z.record(z.string(), z.any())
 });
 
 export async function POST(

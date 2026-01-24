@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { UpdateCustomDomainRequest } from '@/types';
 
 const updateDomainSchema = z.object({
-  branding_settings: z.record(z.any()).optional(),
+  branding_settings: z.record(z.string(), z.any()).optional(),
   custom_css: z.string().optional(),
   custom_js: z.string().optional()
 });

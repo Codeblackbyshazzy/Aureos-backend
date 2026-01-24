@@ -1,0 +1,426 @@
+npm warn Unknown env config "python". This will stop working in the next major version of npm.
+
+> project@0.1.0 type-check
+> tsc --noEmit
+
+app/api/admin/api-usage/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/admin/api-usage/route.ts(71,18): error TS7006: Parameter 'log' implicitly has an 'any' type.
+app/api/admin/api-usage/route.ts(129,18): error TS7006: Parameter 'log' implicitly has an 'any' type.
+app/api/admin/metrics/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/admin/metrics/route.ts(44,41): error TS7006: Parameter 'sub' implicitly has an 'any' type.
+app/api/admin/metrics/route.ts(68,35): error TS7006: Parameter 'sub' implicitly has an 'any' type.
+app/api/admin/subscriptions/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/admin/subscriptions/route.ts(22,46): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/api/admin/subscriptions/route.ts(28,7): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/api/admin/subscriptions/route.ts(49,15): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/api/admin/subscriptions/route.ts(50,16): error TS7006: Parameter 'sub' implicitly has an 'any' type.
+app/api/admin/subscriptions/route.ts(76,36): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/api/admin/subscriptions/route.ts(77,39): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/api/admin/subscriptions/route.ts(78,38): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/api/admin/subscriptions/route.ts(79,36): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/api/admin/users/[id]/change-plan/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/admin/users/[id]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/admin/users/[id]/route.ts(34,35): error TS7006: Parameter 'project' implicitly has an 'any' type.
+app/api/admin/users/[id]/route.ts(73,31): error TS7006: Parameter 'log' implicitly has an 'any' type.
+app/api/admin/users/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/admin/users/route.ts(43,32): error TS7006: Parameter 'user' implicitly has an 'any' type.
+app/api/admin/users/route.ts(56,53): error TS7006: Parameter 'p' implicitly has an 'any' type.
+app/api/auth/guest/verify/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/auth/sso/authorize/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/auth/sso/callback/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/auth/sso/logout/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/comments/[commentId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/health/route.ts(1,30): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/integrations/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/openapi/route.ts(1,30): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/polls/[pollId]/results/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/polls/[pollId]/results/route.ts(18,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/polls/[pollId]/results/route.ts(27,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/polls/[pollId]/vote/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/polls/[pollId]/vote/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/polls/[pollId]/vote/route.ts(27,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/polls/[pollId]/vote/route.ts(36,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/polls/[pollId]/vote/route.ts(39,27): error TS2339: Property 'userId' does not exist on type 'User'.
+app/api/polls/[pollId]/vote/route.ts(44,73): error TS2339: Property 'userId' does not exist on type 'User'.
+app/api/projects/[id]/announcements/[announcementId]/publish/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/announcements/[announcementId]/reads/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/announcements/[announcementId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/announcements/[announcementId]/subscribers/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/announcements/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/cluster/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/email-send/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/email-templates/[templateId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/email-templates/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/feedback/[feedbackId]/comments/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/feedback/[feedbackId]/comments/route.ts(124,33): error TS7006: Parameter 'c' implicitly has an 'any' type.
+app/api/projects/[id]/feedback/[feedbackId]/follow/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/feedback/[feedbackId]/followers/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/feedback/[feedbackId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/feedback/[feedbackId]/status/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/feedback/[feedbackId]/topics/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/feedback/[feedbackId]/topics/route.ts(61,30): error TS7006: Parameter 'topicId' implicitly has an 'any' type.
+app/api/projects/[id]/feedback/[feedbackId]/vote/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/feedback/[feedbackId]/votes/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/feedback/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/feedback/route.ts(131,44): error TS7006: Parameter 'f' implicitly has an 'any' type.
+app/api/projects/[id]/feedback/route.ts(145,45): error TS7006: Parameter 'v' implicitly has an 'any' type.
+app/api/projects/[id]/feedback/route.ts(146,50): error TS7006: Parameter 'f' implicitly has an 'any' type.
+app/api/projects/[id]/feedback/route.ts(148,49): error TS7006: Parameter 'f' implicitly has an 'any' type.
+app/api/projects/[id]/guest-access/[sessionId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/guest-access/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/import/web/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/import/web/route.ts(68,51): error TS7006: Parameter 'f' implicitly has an 'any' type.
+app/api/projects/[id]/prioritize/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/prioritize/route.ts(45,20): error TS7006: Parameter 'c' implicitly has an 'any' type.
+app/api/projects/[id]/roadmap/[itemId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/roadmap/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/sso/config/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/sso/configure/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/statuses/[statusId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/statuses/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/topics/[topicId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/topics/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/webhooks/[webhookId]/deliveries/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/webhooks/[webhookId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/webhooks/[webhookId]/test/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[id]/webhooks/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/analytics/compare/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/analytics/compare/route.ts(90,10): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/compare/route.ts(102,10): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/compare/route.ts(113,10): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/custom-metrics/[metricId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/analytics/custom-metrics/[metricId]/route.ts(17,13): error TS2339: Property 'user' does not exist on type 'User'.
+app/api/projects/[projectId]/analytics/custom-metrics/[metricId]/route.ts(37,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/custom-metrics/[metricId]/route.ts(84,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/custom-metrics/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/analytics/custom-metrics/route.ts(42,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/custom-metrics/route.ts(79,13): error TS2339: Property 'user' does not exist on type 'User'.
+app/api/projects/[projectId]/analytics/custom-metrics/route.ts(88,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/engagement/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/analytics/engagement/route.ts(60,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/engagement/route.ts(71,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/engagement/route.ts(83,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/engagement/route.ts(95,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/engagement/route.ts(109,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/engagement/route.ts(121,25): error TS7006: Parameter 'event' implicitly has an 'any' type.
+app/api/projects/[projectId]/analytics/engagement/route.ts(135,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/engagement/route.ts(147,24): error TS7006: Parameter 'event' implicitly has an 'any' type.
+app/api/projects/[projectId]/analytics/engagement/route.ts(169,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/engagement/route.ts(180,31): error TS7006: Parameter 'event' implicitly has an 'any' type.
+app/api/projects/[projectId]/analytics/export/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/analytics/export/route.ts(55,10): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/export/route.ts(81,10): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/export/route.ts(107,10): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/feedback/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/analytics/feedback/route.ts(71,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/feedback/route.ts(83,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/feedback/route.ts(96,28): error TS7006: Parameter 'item' implicitly has an 'any' type.
+app/api/projects/[projectId]/analytics/feedback/route.ts(109,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/feedback/route.ts(121,25): error TS7006: Parameter 'item' implicitly has an 'any' type.
+app/api/projects/[projectId]/analytics/feedback/route.ts(137,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/feedback/route.ts(150,24): error TS7006: Parameter 'item' implicitly has an 'any' type.
+app/api/projects/[projectId]/analytics/feedback/route.ts(162,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/overview/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/analytics/overview/route.ts(49,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/overview/route.ts(60,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/overview/route.ts(72,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/overview/route.ts(84,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/overview/route.ts(96,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/overview/route.ts(109,42): error TS7006: Parameter 'item' implicitly has an 'any' type.
+app/api/projects/[projectId]/analytics/overview/route.ts(124,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/overview/route.ts(136,24): error TS7006: Parameter 'event' implicitly has an 'any' type.
+app/api/projects/[projectId]/analytics/trends/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/analytics/trends/route.ts(68,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/trends/route.ts(82,29): error TS7006: Parameter 'item' implicitly has an 'any' type.
+app/api/projects/[projectId]/analytics/trends/route.ts(94,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/trends/route.ts(109,28): error TS7006: Parameter 'item' implicitly has an 'any' type.
+app/api/projects/[projectId]/analytics/trends/route.ts(126,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/trends/route.ts(140,25): error TS7006: Parameter 'item' implicitly has an 'any' type.
+app/api/projects/[projectId]/analytics/trends/route.ts(172,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/trends/route.ts(185,29): error TS7006: Parameter 'event' implicitly has an 'any' type.
+app/api/projects/[projectId]/analytics/trends/route.ts(198,29): error TS7006: Parameter 'event' implicitly has an 'any' type.
+app/api/projects/[projectId]/analytics/trends/route.ts(212,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/analytics/trends/route.ts(226,29): error TS7006: Parameter 'item' implicitly has an 'any' type.
+app/api/projects/[projectId]/analyze-sentiment/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/analyze-sentiment/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/projects/[projectId]/analyze-sentiment/route.ts(22,50): error TS2339: Property 'userId' does not exist on type 'User'.
+app/api/projects/[projectId]/analyze/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/analyze/route.ts(6,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/projects/[projectId]/auto-categorize/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/auto-categorize/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/projects/[projectId]/auto-categorize/route.ts(22,50): error TS2339: Property 'userId' does not exist on type 'User'.
+app/api/projects/[projectId]/custom-domain/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/custom-domain/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/projects/[projectId]/dns-records/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/domains/[domainId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/domains/[domainId]/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/projects/[projectId]/domains/[domainId]/verify/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/domains/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/domains/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/projects/[projectId]/integrations/[integrationId]/config/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/integrations/[integrationId]/config/route.ts(22,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/integrations/[integrationId]/logs/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/integrations/[integrationId]/logs/route.ts(36,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/integrations/[integrationId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/integrations/[integrationId]/route.ts(17,13): error TS2339: Property 'user' does not exist on type 'User'.
+app/api/projects/[projectId]/integrations/[integrationId]/route.ts(36,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/integrations/[integrationId]/route.ts(83,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/integrations/[integrationName]/configure/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/integrations/[integrationName]/configure/route.ts(17,13): error TS2339: Property 'user' does not exist on type 'User'.
+app/api/projects/[projectId]/integrations/[integrationName]/configure/route.ts(39,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/integrations/[integrationName]/configure/route.ts(58,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/integrations/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/integrations/route.ts(34,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/languages/[languageCode]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/languages/[languageCode]/route.ts(21,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/languages/[languageCode]/route.ts(40,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/languages/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/languages/route.ts(23,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/languages/route.ts(53,13): error TS2339: Property 'user' does not exist on type 'User'.
+app/api/projects/[projectId]/languages/route.ts(63,10): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/languages/route.ts(70,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/languages/route.ts(89,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/members/[userId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/members/[userId]/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/projects/[projectId]/members/[userId]/route.ts(23,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/members/[userId]/route.ts(30,34): error TS2339: Property 'userId' does not exist on type 'User'.
+app/api/projects/[projectId]/members/[userId]/route.ts(42,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/members/[userId]/route.ts(57,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/members/[userId]/route.ts(99,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/members/[userId]/route.ts(106,34): error TS2339: Property 'userId' does not exist on type 'User'.
+app/api/projects/[projectId]/members/[userId]/route.ts(115,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/members/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/members/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/projects/[projectId]/members/route.ts(24,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/members/route.ts(31,34): error TS2339: Property 'userId' does not exist on type 'User'.
+app/api/projects/[projectId]/members/route.ts(43,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/members/route.ts(57,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/members/route.ts(72,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/members/route.ts(116,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/polls/[pollId]/options/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/polls/[pollId]/options/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/projects/[projectId]/polls/[pollId]/options/route.ts(22,77): error TS2339: Property 'userId' does not exist on type 'User'.
+app/api/projects/[projectId]/polls/[pollId]/results/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/polls/[pollId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/polls/[pollId]/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/projects/[projectId]/polls/[pollId]/vote/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/polls/[pollId]/vote/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/projects/[projectId]/polls/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/polls/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/projects/[projectId]/realtime/presence/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/realtime/status/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/realtime/subscribe/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/realtime/subscribe/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/projects/[projectId]/realtime/subscriptions/[subscriptionId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/search/advanced/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/search/advanced/route.ts(30,64): error TS2339: Property 'userId' does not exist on type 'User'.
+app/api/projects/[projectId]/search/filters/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/search/filters/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/projects/[projectId]/search/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/search/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/projects/[projectId]/search/suggestions/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(22,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(32,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(52,46): error TS7006: Parameter 'question' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(66,19): error TS7006: Parameter 'a' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(67,16): error TS7006: Parameter 'a' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(70,9): error TS2322: Type '{ answer: unknown; count: any; percentage: number; }[]' is not assignable to type '{ answer: string; count: number; percentage: number; }[]'.
+  Type '{ answer: unknown; count: any; percentage: number; }' is not assignable to type '{ answer: string; count: number; percentage: number; }'.
+    Types of property 'answer' are incompatible.
+      Type 'unknown' is not assignable to type 'string'.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(72,37): error TS7006: Parameter 'a' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(73,73): error TS7006: Parameter 'a' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(78,19): error TS7006: Parameter 'a' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(79,16): error TS7006: Parameter 'a' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(82,25): error TS7006: Parameter 'rating' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(95,43): error TS7006: Parameter 'a' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(98,42): error TS7006: Parameter 'a' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(117,19): error TS7006: Parameter 'a' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(118,16): error TS7006: Parameter 'a' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/analytics/route.ts(121,31): error TS7006: Parameter 'answer' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/questions/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/surveys/[surveyId]/questions/route.ts(17,13): error TS2339: Property 'user' does not exist on type 'User'.
+app/api/projects/[projectId]/surveys/[surveyId]/questions/route.ts(26,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/surveys/[surveyId]/questions/route.ts(38,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/surveys/[surveyId]/responses/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/surveys/[surveyId]/responses/route.ts(22,13): error TS2339: Property 'user' does not exist on type 'User'.
+app/api/projects/[projectId]/surveys/[surveyId]/responses/route.ts(31,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/surveys/[surveyId]/responses/route.ts(46,55): error TS7006: Parameter 'answer' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/responses/route.ts(54,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/surveys/[surveyId]/responses/route.ts(97,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/surveys/[surveyId]/responses/route.ts(109,41): error TS7006: Parameter 'r' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/responses/route.ts(112,10): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/surveys/[surveyId]/responses/route.ts(120,25): error TS7006: Parameter 'answer' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/responses/route.ts(129,25): error TS7006: Parameter 'response' implicitly has an 'any' type.
+app/api/projects/[projectId]/surveys/[surveyId]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/surveys/[surveyId]/route.ts(23,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/surveys/[surveyId]/route.ts(74,13): error TS2339: Property 'user' does not exist on type 'User'.
+app/api/projects/[projectId]/surveys/[surveyId]/route.ts(94,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/surveys/[surveyId]/route.ts(141,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/surveys/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/surveys/route.ts(42,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/surveys/route.ts(79,13): error TS2339: Property 'user' does not exist on type 'User'.
+app/api/projects/[projectId]/surveys/route.ts(94,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/surveys/route.ts(96,32): error TS2339: Property 'project_id' does not exist on type 'CreateSurveyRequest'.
+app/api/projects/[projectId]/surveys/route.ts(101,32): error TS2339: Property 'created_by' does not exist on type 'CreateSurveyRequest'.
+app/api/projects/[projectId]/translations/import/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/translations/import/route.ts(20,13): error TS2339: Property 'user' does not exist on type 'User'.
+app/api/projects/[projectId]/translations/import/route.ts(45,66): error TS7006: Parameter 'line' implicitly has an 'any' type.
+app/api/projects/[projectId]/translations/import/route.ts(48,47): error TS7006: Parameter 'h' implicitly has an 'any' type.
+app/api/projects/[projectId]/translations/import/route.ts(49,49): error TS7006: Parameter 'h' implicitly has an 'any' type.
+app/api/projects/[projectId]/translations/import/route.ts(108,12): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/translations/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/translations/route.ts(43,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/translations/route.ts(93,13): error TS2339: Property 'user' does not exist on type 'User'.
+app/api/projects/[projectId]/translations/route.ts(105,10): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/projects/[projectId]/verify-domain/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/projects/[projectId]/verify-domain/route.ts(5,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+app/api/public/roadmap/[slug]/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/stripe/create-checkout-session/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/stripe/create-portal-session/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/stripe/webhook/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/stripe/webhook/route.ts(4,20): error TS2307: Cannot find module 'stripe' or its corresponding type declarations.
+app/api/users/email-preferences/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/users/language-preference/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/users/language-preference/route.ts(15,13): error TS2339: Property 'user' does not exist on type 'User'.
+app/api/users/language-preference/route.ts(21,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/users/language-preference/route.ts(48,13): error TS2339: Property 'user' does not exist on type 'User'.
+app/api/users/language-preference/route.ts(83,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/webhooks/events/route.ts(1,43): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/ws/route.ts(1,29): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+app/api/ws/route.ts(2,44): error TS2307: Cannot find module 'ws' or its corresponding type declarations.
+app/api/ws/route.ts(24,65): error TS2339: Property 'auth' does not exist on type 'Promise<any>'.
+app/api/ws/route.ts(32,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+app/api/ws/route.ts(87,27): error TS7006: Parameter 'error' implicitly has an 'any' type.
+app/api/ws/route.ts(99,7): error TS2353: Object literal may only specify known properties, and 'webSocket' does not exist in type 'ResponseInit'.
+app/layout.tsx(1,31): error TS2307: Cannot find module 'next' or its corresponding type declarations.
+app/layout.tsx(2,35): error TS2307: Cannot find module 'next/font/google' or its corresponding type declarations.
+app/layout.tsx(23,13): error TS2503: Cannot find namespace 'React'.
+app/layout.tsx(26,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+app/layout.tsx(26,5): error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+app/layout.tsx(27,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+app/layout.tsx(29,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+app/layout.tsx(30,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+app/page.tsx(3,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+app/page.tsx(3,5): error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+app/page.tsx(4,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+app/page.tsx(4,29): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+app/page.tsx(5,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+app/page.tsx(5,111): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+app/page.tsx(6,7): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+app/page.tsx(6,32): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+app/page.tsx(6,65): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+app/page.tsx(6,81): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+app/page.tsx(7,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+lib/ai-services/deepseek.ts(1,19): error TS2307: Cannot find module 'axios' or its corresponding type declarations.
+lib/ai-services/firecrawl.ts(1,19): error TS2307: Cannot find module 'axios' or its corresponding type declarations.
+lib/ai-services/firecrawl.ts(36,53): error TS18046: 'error' is of type 'unknown'.
+lib/ai-services/firecrawl.ts(36,84): error TS18046: 'error' is of type 'unknown'.
+lib/ai-services/gemini.ts(1,36): error TS2307: Cannot find module '@google/generative-ai' or its corresponding type declarations.
+lib/auth.ts(1,25): error TS2307: Cannot find module 'next/headers' or its corresponding type declarations.
+lib/auth.ts(2,29): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+lib/auto-categorize.ts(18,33): error TS2554: Expected 1 arguments, but got 5.
+lib/auto-categorize.ts(168,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/auto-categorize.ts(183,44): error TS7006: Parameter 'item' implicitly has an 'any' type.
+lib/auto-categorize.ts(187,12): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/auto-categorize.ts(198,12): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/auto-categorize.ts(209,14): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/auto-categorize.ts(222,14): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/auto-categorize.ts(256,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/auto-categorize.ts(278,18): error TS7006: Parameter 'item' implicitly has an 'any' type.
+lib/auto-categorize.ts(296,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/auto-categorize.ts(323,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/auto-categorize.ts(331,22): error TS7006: Parameter 't' implicitly has an 'any' type.
+lib/auto-categorize.ts(342,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/comments.ts(1,32): error TS2307: Cannot find module '@supabase/supabase-js' or its corresponding type declarations.
+lib/comments.ts(63,13): error TS7022: 'data' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+lib/db-helpers.ts(1,32): error TS2307: Cannot find module '@supabase/supabase-js' or its corresponding type declarations.
+lib/domains.ts(75,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/domains.ts(86,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/domains.ts(145,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/domains.ts(158,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/errors.ts(1,30): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+lib/errors.ts(2,26): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+lib/errors.ts(47,36): error TS7006: Parameter 'e' implicitly has an 'any' type.
+lib/feedback-analysis.ts(2,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+lib/feedback-analysis.ts(58,49): error TS2307: Cannot find module '@google/generative-ai' or its corresponding type declarations.
+lib/feedback-analysis.ts(182,70): error TS7006: Parameter 'cluster' implicitly has an 'any' type.
+lib/feedback-analysis.ts(187,85): error TS7006: Parameter 'item' implicitly has an 'any' type.
+lib/feedback-analysis.ts(218,53): error TS2339: Property 'title' does not exist on type 'ClusterWithId'.
+lib/feedback-analysis.ts(220,17): error TS7006: Parameter 'id' implicitly has an 'any' type.
+lib/feedback-analysis.ts(304,20): error TS2339: Property 'title' does not exist on type 'ClusterWithId'.
+lib/feedback-analysis.ts(305,22): error TS2339: Property 'summary' does not exist on type 'ClusterWithId'.
+lib/feedback-analysis.ts(306,24): error TS2339: Property 'sentiment' does not exist on type 'ClusterWithId'.
+lib/feedback-analysis.ts(307,29): error TS2339: Property 'priorityScore' does not exist on type 'ClusterWithId'.
+lib/feedback-analysis.ts(308,30): error TS2339: Property 'effortEstimate' does not exist on type 'ClusterWithId'.
+lib/feedback-analysis.ts(309,25): error TS2339: Property 'keyQuotes' does not exist on type 'ClusterWithId'.
+lib/feedback-analysis.ts(325,35): error TS2339: Property 'title' does not exist on type 'ClusterWithId'.
+lib/feedback-analysis.ts(336,17): error TS2339: Property 'title' does not exist on type 'RoadmapItemWithId'.
+lib/feedback-analysis.ts(337,27): error TS2339: Property 'expectedImpact' does not exist on type 'RoadmapItemWithId'.
+lib/feedback-analysis.ts(338,17): error TS2339: Property 'risks' does not exist on type 'RoadmapItemWithId'.
+lib/feedback-analysis.ts(339,29): error TS2339: Property 'suggestedQuarter' does not exist on type 'RoadmapItemWithId'.
+lib/followers.ts(1,32): error TS2307: Cannot find module '@supabase/supabase-js' or its corresponding type declarations.
+lib/guest-auth.ts(1,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+lib/internal-auth.ts(1,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+lib/polls.ts(59,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/polls.ts(76,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/polls.ts(87,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/polls.ts(105,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/polls.ts(113,19): error TS7006: Parameter 'option' implicitly has an 'any' type.
+lib/polls.ts(115,23): error TS7006: Parameter 'vote' implicitly has an 'any' type.
+lib/polls.ts(122,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/polls.ts(132,26): error TS7006: Parameter 'option' implicitly has an 'any' type.
+lib/polls.ts(162,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/polls.ts(177,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/polls.ts(191,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/polls.ts(208,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/polls.ts(218,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/polls.ts(229,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/polls.ts(260,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/polls.ts(276,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/polls.ts(289,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/realtime.ts(29,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/realtime.ts(41,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/request-utils.ts(1,29): error TS2307: Cannot find module 'next/server' or its corresponding type declarations.
+lib/search.ts(36,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/search.ts(53,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/search.ts(67,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/search.ts(138,52): error TS7006: Parameter 'item' implicitly has an 'any' type.
+lib/search.ts(214,26): error TS7006: Parameter 'item' implicitly has an 'any' type.
+lib/search.ts(228,27): error TS7006: Parameter 'item' implicitly has an 'any' type.
+lib/search.ts(268,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/search.ts(282,17): error TS7006: Parameter 'item' implicitly has an 'any' type.
+lib/search.ts(284,19): error TS7006: Parameter 'word' implicitly has an 'any' type.
+lib/sentiment.ts(18,33): error TS2554: Expected 1 arguments, but got 5.
+lib/sentiment.ts(133,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/sentiment.ts(147,44): error TS7006: Parameter 'item' implicitly has an 'any' type.
+lib/sentiment.ts(185,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/sentiment.ts(198,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/sentiment.ts(213,17): error TS7006: Parameter 'item' implicitly has an 'any' type.
+lib/sentiment.ts(227,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/sentiment.ts(240,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/sentiment.ts(246,8): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/sentiment.ts(270,6): error TS2339: Property 'from' does not exist on type 'Promise<any>'.
+lib/sentiment.ts(286,20): error TS7006: Parameter 'item' implicitly has an 'any' type.
+lib/stripe.ts(1,20): error TS2307: Cannot find module 'stripe' or its corresponding type declarations.
+lib/supabase.ts(1,30): error TS2307: Cannot find module '@supabase/supabase-js' or its corresponding type declarations.
+lib/supabase.ts(2,25): error TS2307: Cannot find module 'next/headers' or its corresponding type declarations.
+lib/validation-phase1.ts(1,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+lib/validation-phase2.ts(1,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+lib/validation-phase2.ts(57,17): error TS7006: Parameter 'val' implicitly has an 'any' type.
+lib/validation-phase2.ts(57,22): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
+lib/validation-phase2.ts(144,17): error TS7006: Parameter 'val' implicitly has an 'any' type.
+lib/validation-phase2.ts(144,22): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
+lib/validation.ts(1,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+lib/voting.ts(1,32): error TS2307: Cannot find module '@supabase/supabase-js' or its corresponding type declarations.
+lib/voting.ts(57,31): error TS7006: Parameter 'acc' implicitly has an 'any' type.
+lib/voting.ts(57,36): error TS7006: Parameter 'item' implicitly has an 'any' type.
+lib/webhooks.ts(54,24): error TS7006: Parameter 'row' implicitly has an 'any' type.
+lib/webhooks.ts(135,12): error TS7006: Parameter 's' implicitly has an 'any' type.
+lib/webhooks.ts(136,16): error TS7006: Parameter 'name' implicitly has an 'any' type.
+lib/webhooks.ts(208,12): error TS7006: Parameter 's' implicitly has an 'any' type.
+lib/webhooks.ts(209,16): error TS7006: Parameter 'name' implicitly has an 'any' type.
+lib/webhooks.ts(363,12): error TS7006: Parameter 's' implicitly has an 'any' type.
+lib/webhooks.ts(364,16): error TS7006: Parameter 'name' implicitly has an 'any' type.
+next.config.ts(1,33): error TS2307: Cannot find module 'next' or its corresponding type declarations.

@@ -10,7 +10,7 @@ const updatePollSchema = z.object({
   description: z.string().optional(),
   status: z.enum(['active', 'closed', 'draft']).optional(),
   type: z.enum(['single_choice', 'multiple_choice', 'ranking']).optional(),
-  settings: z.record(z.any()).optional(),
+  settings: z.record(z.string(), z.any()).optional(),
   is_anonymous: z.boolean().optional(),
   allow_retraction: z.boolean().optional(),
   closed_at: z.string().datetime().optional().nullable()

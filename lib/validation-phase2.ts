@@ -34,7 +34,7 @@ export const configureSsoSchema = z
     providerType: z.enum(['oidc', 'saml']),
     name: z.string().min(1).max(120),
     enabled: z.boolean().optional().default(true),
-    attributeMapping: z.record(z.string()).optional().default({}),
+    attributeMapping: z.record(z.string(), z.string()).optional().default({}),
 
     oidc: z
       .object({
@@ -99,7 +99,7 @@ export const sendEmailSchema = z.object({
   to: z.string().email(),
   templateId: z.string().uuid().optional(),
   subject: z.string().min(1).max(200).optional(),
-  variables: z.record(z.string()).optional().default({}),
+  variables: z.record(z.string(), z.string()).optional().default({}),
   html: z.string().min(1).max(200000).optional(),
   text: z.string().min(1).max(200000).optional(),
 });
@@ -131,7 +131,7 @@ export const webhookDeliveriesQuerySchema = z.object({
 export const triggerWebhookEventSchema = z.object({
   projectId: z.string().uuid(),
   event: z.string().min(1).max(120),
-  payload: z.record(z.unknown()).default({}),
+  payload: z.record(z.string(), z.unknown()).default({}),
 });
 
 export const createGuestAccessSchema = z

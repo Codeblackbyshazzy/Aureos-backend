@@ -780,7 +780,7 @@ export interface AutoCategorizeRequest {
 
 // WebSocket Types
 export interface WebSocketMessage {
-  type: 'feedback:created' | 'feedback:voted' | 'comment:added' | 'status:changed' | 'user:online' | 'user:offline' | 'poll:created' | 'poll:voted';
+  type: 'feedback:created' | 'feedback:voted' | 'comment:added' | 'status:changed' | 'user:online' | 'user:offline' | 'poll:created' | 'poll:voted' | 'project:presence';
   payload: any;
   timestamp: string;
   user_id: string;
