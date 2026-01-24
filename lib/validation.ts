@@ -136,3 +136,138 @@ export const advancedSearchSchema = searchQuerySchema.extend({
 export const addPollOptionsSchema = z.object({
   options: z.array(z.string().min(1).max(500)).min(1, 'At least one option required').max(10, 'Maximum 10 options allowed')
 });
+
+// Phase 3 Validation Schemas
+
+// Survey Schemas
+export const createSurveySchema = z.object({
+  title: z.string().min(1, 'Title is required').max(200, 'Title too long'),
+  description: z.string().max(1000, 'Description too long').optional(),
+  status: z.enum(['draft', 'active', 'closed']).optional(),
+  settings: z.record(z.any()).optional()
+});
+
+export const updateSurveySchema = z.object({
+  title: z.string().min(1, 'Title is required').max(200, 'Title too long').optional(),
+  description: z.string().max(1000, 'Description too long').optional(),
+  status: z.enum(['draft', 'active', 'closed']).optional(),
+  settings: z.record(z.any()).optional(),
+  closed_at: z.string().datetime().optional()
+});
+
+export const createSurveyQuestionSchema = z.object({
+  question_text: z.string().min(1, 'Question text is required').max(1000, 'Question text too long'),
+  question_type: z.enum(['multiple_choice', 'single_choice', 'text', 'rating', 'yes_no']),
+  options: z.array(z.object({
+    text: z.string().min(1, 'Option text is required').max(200, 'Option text too long'),
+    value: z.string().min(1).max(200)
+  })).optional(),
+  required: z.boolean().optional(),
+  order_index: z.number().int().min(0).optional()
+});
+
+export const submitSurveyResponseSchema = z.object({
+  respondent_id: z.string().uuid().optional(),
+  respondent_email: z.string().email().optional(),
+  answers: z.array(z.object({
+    question_id: z.string().uuid('Invalid question ID'),
+    answer_text: z.string().optional(),
+    answer_value: z.any().optional()
+  })).min(1, 'At least one answer required'),
+  metadata: z.record(z.any()).optional()
+});
+
+// Integration Schemas
+export const configureIntegrationSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100, 'Name too long'),
+  config: z.record(z.any()).default({}),
+  credentials: z.record(z.any()).default({}),
+  is_active: z.boolean().optional()
+});
+
+export const updateIntegrationSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100, 'Name too long').optional(),
+  config: z.record(z.any()).optional(),
+  credentials: z.record(z.any()).optional(),
+  is_active: z.boolean().optional()
+});
+
+// Analytics Schemas
+export const analyticsQuerySchema = z.object({
+  startDate: z.string().datetime().optional(),
+  endDate: z.string().datetime().optional(),
+  metric: z.string().optional(),
+  dimensions: z.record(z.any()).optional()
+});
+
+export const createCustomMetricSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100, 'Name too long'),
+  description: z.string().max(500, 'Description too long').optional(),
+  formula: z.string().min(1, 'Formula is required').max(2000, 'Formula too long'),
+  chart_type: z.enum(['line', 'bar', 'pie', 'metric']).optional()
+});
+
+export const updateCustomMetricSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100, 'Name too long').optional(),
+  description: z.string().max(500, 'Description too long').optional(),
+  formula: z.string().min(1, 'Formula is required').max(2000, 'Formula too long').optional(),
+  chart_type: z.enum(['line', 'bar', 'pie', 'metric']).optional(),
+  is_active: z.boolean().optional()
+});
+
+export const createDashboardWidgetSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100, 'Name too long'),
+  widget_type: z.enum(['metric', 'chart', 'table', 'list']),
+  metric_name: z.string().optional(),
+  custom_metric_id: z.string().uuid().optional(),
+  configuration: z.record(z.any()).default({}),
+  position_x: z.number().int().min(0).optional(),
+  position_y: z.number().int().min(0).optional(),
+  width: z.number().int().min(1).max(12).optional(),
+  height: z.number().int().min(1).max(12).optional()
+});
+
+export const updateDashboardWidgetSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100, 'Name too long').optional(),
+  widget_type: z.enum(['metric', 'chart', 'table', 'list']).optional(),
+  metric_name: z.string().optional(),
+  custom_metric_id: z.string().uuid().optional(),
+  configuration: z.record(z.any()).optional(),
+  position_x: z.number().int().min(0).optional(),
+  position_y: z.number().int().min(0).optional(),
+  width: z.number().int().min(1).max(12).optional(),
+  height: z.number().int().min(1).max(12).optional(),
+  is_visible: z.boolean().optional()
+});
+
+// Multi-language Support Schemas
+export const addProjectLanguageSchema = z.object({
+  language_code: z.string().min(2, 'Language code is required').max(10, 'Language code too long'),
+  language_name: z.string().min(1, 'Language name is required').max(50, 'Language name too long'),
+  is_default: z.boolean().optional()
+});
+
+export const updateTranslationSchema = z.object({
+  value: z.string().min(1, 'Translation value is required').max(2000, 'Translation value too long'),
+  context: z.string().max(500, 'Context too long').optional(),
+  is_approved: z.boolean().optional()
+});
+
+export const bulkUpdateTranslationsSchema = z.object({
+  translations: z.array(z.object({
+    key: z.string().min(1, 'Translation key is required'),
+    value: z.string().min(1, 'Translation value is required').max(2000, 'Translation value too long'),
+    context: z.string().max(500, 'Context too long').optional()
+  })).min(1, 'At least one translation required')
+});
+
+export const importTranslationsSchema = z.object({
+  format: z.enum(['json', 'csv', 'po']),
+  content: z.string().min(1, 'Content is required'),
+  language_code: z.string().min(2, 'Language code is required').max(10, 'Language code too long')
+});
+
+export const updateUserLanguagePreferenceSchema = z.object({
+  language_code: z.string().min(2, 'Language code is required').max(10, 'Language code too long'),
+  preference_level: z.number().int().min(1).max(5)
+});
