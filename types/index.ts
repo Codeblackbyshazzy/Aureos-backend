@@ -334,6 +334,75 @@ export interface GuestAccessToken {
   last_used_at: string | null;
 }
 
+// Feedback Analysis Models
+
+export interface FeedbackAnalysis {
+  id: string;
+  project_id: string;
+  user_id: string;
+  ai_provider: 'gemini' | 'deepseek';
+  feedback_count: number;
+  cluster_count: number;
+  status: 'processing' | 'completed' | 'failed';
+  created_at: string;
+  updated_at: string;
+  metadata: Record<string, unknown>;
+}
+
+export interface FeedbackClusterAnalysis {
+  id: string;
+  analysis_id: string;
+  cluster_id: string | null;
+  title: string;
+  summary: string | null;
+  sentiment: 'Very Negative' | 'Negative' | 'Neutral' | 'Positive' | 'Mixed' | null;
+  priority_score: number | null;
+  effort_estimate: 'Low' | 'Medium' | 'High' | null;
+  key_quotes: string[];
+  created_at: string;
+}
+
+export interface RoadmapItemAnalysis {
+  id: string;
+  analysis_id: string;
+  cluster_id: string | null;
+  title: string;
+  expected_impact: string | null;
+  risks: string | null;
+  suggested_quarter: 'Q1' | 'Q2' | 'Q3' | 'Q4' | null;
+  cluster_ids: string[];
+  created_at: string;
+}
+
+export interface FeedbackAnalysisRequest {
+  projectId: string;
+}
+
+export interface FeedbackAnalysisResponse {
+  projectId: string;
+  analysisId: string;
+  timestamp: string;
+  totalFeedbackProcessed: number;
+  clusters: Array<{
+    id: string;
+    title: string;
+    count: number;
+    summary: string;
+    sentiment: 'Very Negative' | 'Negative' | 'Neutral' | 'Positive' | 'Mixed';
+    keyQuotes: string[];
+    priorityScore: number;
+    effortEstimate: 'Low' | 'Medium' | 'High';
+  }>;
+  topRoadmapItems: Array<{
+    id: string;
+    title: string;
+    clusterIds: string[];
+    expectedImpact: string;
+    risks: string;
+    suggestedQuarter: 'Q1' | 'Q2' | 'Q3' | 'Q4';
+  }>;
+}
+
 // API Response Types
 
 export interface ApiResponse<T = unknown> {
@@ -1111,6 +1180,11 @@ export interface SavedSearchFilter {
 
 export interface RealtimeSubscription {
   id: string;
+  project_id: string;
+  channel: string;
+  event: string;
+  created_at: string;
+}
 
 export interface CreateCustomDomainRequest {
   domain: string;
