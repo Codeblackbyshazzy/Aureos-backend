@@ -1,5 +1,5 @@
-import { createServerClient } from './supabase';
-import { SearchFilters, SearchResult, SearchResponse } from '../types';
+import { createServerClient, createAdminClient } from './supabase';
+import { SearchFilters, SearchResult, SearchResponse, SavedSearchFilter } from '../types';
 
 export interface SearchOptions {
   query: string;
@@ -8,6 +8,55 @@ export interface SearchOptions {
   filters?: SearchFilters;
   page?: number;
   limit?: number;
+}
+
+export async function logSearchActivity(
+  projectId: string,
+  query: string,
+  resultsCount: number,
+  userId: string | null
+) {
+  const supabase = createAdminClient();
+  await supabase.from('search_analytics').insert({
+    project_id: projectId,
+    query,
+    results_count: resultsCount,
+    user_id: userId
+  });
+}
+
+export async function saveSearchFilter(
+  projectId: string,
+  userId: string,
+  name: string,
+  filterConfig: Record<string, any>
+): Promise<SavedSearchFilter> {
+  const supabase = createServerClient();
+  const { data, error } = await supabase
+    .from('search_filters')
+    .insert({
+      project_id: projectId,
+      created_by: userId,
+      name,
+      filter_config: filterConfig
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function getSavedSearchFilters(projectId: string) {
+  const supabase = createServerClient();
+  const { data, error } = await supabase
+    .from('search_filters')
+    .select('*')
+    .eq('project_id', projectId)
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  return data;
 }
 
 export async function performFullTextSearch(options: SearchOptions): Promise<SearchResponse> {
@@ -276,6 +325,11 @@ export async function advancedSearch(projectId: string, userId: string, searchPa
   };
 
   let response = await performFullTextSearch(searchOptions);
+
+  // Log search activity
+  if (searchOptions.query) {
+    await logSearchActivity(projectId, searchOptions.query, response.total, userId);
+  }
 
   // Apply custom sorting if needed
   if (searchParams.sortBy && searchParams.sortBy !== 'relevance') {

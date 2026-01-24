@@ -62,6 +62,15 @@ export async function POST(
     // Increment count
     await incrementCommentCount(feedbackId, supabase);
 
+    // Broadcast via WebSocket
+    try {
+      const { wsManager, createCommentAddedMessage } = await import('@/lib/websocket');
+      const message = createCommentAddedMessage(feedbackId, comment, user.id);
+      wsManager.broadcastToProject(projectId, message);
+    } catch (wsError) {
+      console.error('Failed to broadcast comment:', wsError);
+    }
+
     return NextResponse.json({
       success: true,
       comment: { ...comment, replies: [] }

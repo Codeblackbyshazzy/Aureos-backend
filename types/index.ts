@@ -525,6 +525,7 @@ export interface ProjectContext extends AuthContext {
 // Phase 4: Extended Types
 
 export type PollStatus = 'active' | 'closed' | 'draft';
+export type PollType = 'single_choice' | 'multiple_choice' | 'ranking';
 
 export interface IdeaPoll {
   id: string;
@@ -532,6 +533,10 @@ export interface IdeaPoll {
   title: string;
   description: string | null;
   status: PollStatus;
+  type: PollType;
+  settings: Record<string, unknown>;
+  is_anonymous: boolean;
+  allow_retraction: boolean;
   created_at: string;
   closed_at: string | null;
   created_by: string;
@@ -635,13 +640,21 @@ export interface CreatePollRequest {
   description?: string;
   options: string[];
   status?: PollStatus;
+  type?: PollType;
+  settings?: Record<string, unknown>;
+  is_anonymous?: boolean;
+  allow_retraction?: boolean;
 }
 
 export interface UpdatePollRequest {
   title?: string;
   description?: string;
   status?: PollStatus;
-  closed_at?: string;
+  type?: PollType;
+  settings?: Record<string, unknown>;
+  is_anonymous?: boolean;
+  allow_retraction?: boolean;
+  closed_at?: string | null;
 }
 
 export interface VoteRequest {
@@ -1039,4 +1052,90 @@ export interface ImportTranslationsRequest {
 export interface UpdateUserLanguagePreferenceRequest {
   language_code: string;
   preference_level: number;
+}
+
+// Phase 4: Enterprise Features Types
+
+export interface CustomDomainEnterprise {
+  id: string;
+  project_id: string;
+  domain: string;
+  status: 'pending' | 'verified' | 'failed';
+  ssl_status: 'none' | 'pending' | 'active' | 'expired';
+  verification_method: 'dns-txt' | 'dns-cname' | 'http';
+  verification_token: string | null;
+  created_at: string;
+  updated_at: string;
+  verified_at: string | null;
+}
+
+export interface DomainVerification {
+  id: string;
+  domain_id: string;
+  type: string;
+  name: string;
+  value: string;
+  is_verified: boolean;
+  last_checked_at: string | null;
+  created_at: string;
+}
+
+export interface DomainSettings {
+  id: string;
+  domain_id: string;
+  branding_settings: Record<string, unknown>;
+  custom_css: string | null;
+  custom_js: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SearchIndex {
+  id: string;
+  project_id: string;
+  name: string;
+  index_type: string;
+  status: string;
+  last_indexed_at: string | null;
+  created_at: string;
+}
+
+export interface SavedSearchFilter {
+  id: string;
+  project_id: string;
+  name: string;
+  filter_config: Record<string, unknown>;
+  created_by: string | null;
+  created_at: string;
+}
+
+export interface RealtimeSubscription {
+  id: string;
+
+export interface CreateCustomDomainRequest {
+  domain: string;
+  verification_method?: 'dns-txt' | 'dns-cname' | 'http';
+}
+
+export interface UpdateCustomDomainRequest {
+  branding_settings?: Record<string, unknown>;
+  custom_css?: string;
+  custom_js?: string;
+}
+
+export interface SearchRequest {
+  query: string;
+  filters?: SearchFilters;
+  page?: number;
+  limit?: number;
+}
+
+export interface CreateSearchFilterRequest {
+  name: string;
+  filter_config: Record<string, unknown>;
+}
+
+export interface RealtimeSubscribeRequest {
+  event_types: string[];
+  channel_name: string;
 }
