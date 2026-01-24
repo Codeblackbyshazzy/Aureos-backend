@@ -710,3 +710,333 @@ export interface ProjectPresence {
   last_seen: string;
   is_online: boolean;
 }
+
+// Phase 3 Types
+
+// Survey Types
+export type SurveyStatus = 'draft' | 'active' | 'closed';
+
+export type SurveyQuestionType = 'multiple_choice' | 'single_choice' | 'text' | 'rating' | 'yes_no';
+
+export interface Survey {
+  id: string;
+  project_id: string;
+  title: string;
+  description: string | null;
+  status: SurveyStatus;
+  settings: Record<string, unknown>;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+  closed_at: string | null;
+}
+
+export interface SurveyQuestion {
+  id: string;
+  survey_id: string;
+  question_text: string;
+  question_type: SurveyQuestionType;
+  options: SurveyQuestionOption[];
+  required: boolean;
+  order_index: number;
+  created_at: string;
+}
+
+export interface SurveyQuestionOption {
+  text: string;
+  value: string;
+}
+
+export interface SurveyResponse {
+  id: string;
+  survey_id: string;
+  respondent_id: string | null;
+  respondent_email: string | null;
+  submitted_at: string;
+  metadata: Record<string, unknown>;
+}
+
+export interface SurveyAnswer {
+  id: string;
+  response_id: string;
+  question_id: string;
+  answer_text: string | null;
+  answer_value: unknown;
+  created_at: string;
+}
+
+export interface SurveyAnalytics {
+  total_responses: number;
+  completion_rate: number;
+  question_analytics: Array<{
+    question_id: string;
+    question_text: string;
+    question_type: SurveyQuestionType;
+    total_answers: number;
+    answer_distribution: Array<{
+      answer: string;
+      count: number;
+      percentage: number;
+    }>;
+  }>;
+}
+
+// Integration Types
+export type IntegrationProvider = 'slack' | 'discord' | 'github' | 'zapier' | 'mailchimp' | 'intercom';
+
+export interface Integration {
+  id: string;
+  project_id: string;
+  provider: IntegrationProvider;
+  name: string;
+  is_active: boolean;
+  config: Record<string, unknown>;
+  credentials: Record<string, unknown>;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+  last_sync_at: string | null;
+}
+
+export interface IntegrationLog {
+  id: string;
+  integration_id: string;
+  event_type: string;
+  message: string | null;
+  data: Record<string, unknown>;
+  success: boolean;
+  error_message: string | null;
+  created_at: string;
+}
+
+// Analytics Types
+export interface AnalyticsEvent {
+  id: string;
+  project_id: string;
+  event_type: string;
+  event_name: string;
+  user_id: string | null;
+  session_id: string | null;
+  properties: Record<string, unknown>;
+  timestamp: string;
+  ip_address: string | null;
+  user_agent: string | null;
+}
+
+export interface AnalyticsAggregate {
+  id: string;
+  project_id: string;
+  metric_name: string;
+  date: string;
+  hour: number | null;
+  value: number;
+  dimensions: Record<string, unknown>;
+  created_at: string;
+}
+
+export interface CustomMetric {
+  id: string;
+  project_id: string;
+  name: string;
+  description: string | null;
+  formula: string;
+  chart_type: 'line' | 'bar' | 'pie' | 'metric';
+  is_active: boolean;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DashboardWidget {
+  id: string;
+  project_id: string;
+  name: string;
+  widget_type: 'metric' | 'chart' | 'table' | 'list';
+  metric_name: string | null;
+  custom_metric_id: string | null;
+  configuration: Record<string, unknown>;
+  position_x: number;
+  position_y: number;
+  width: number;
+  height: number;
+  is_visible: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AnalyticsOverview {
+  total_events: number;
+  unique_users: number;
+  page_views: number;
+  feedback_created: number;
+  engagement_rate: number;
+  top_events: Array<{
+    event_name: string;
+    count: number;
+  }>;
+  trend_data: Array<{
+    date: string;
+    value: number;
+  }>;
+}
+
+// Multi-language Support Types
+export interface ProjectLanguage {
+  id: string;
+  project_id: string;
+  language_code: string;
+  language_name: string;
+  is_default: boolean;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface Translation {
+  id: string;
+  project_id: string;
+  language_code: string;
+  key: string;
+  value: string;
+  context: string | null;
+  is_approved: boolean;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface UserLanguagePreference {
+  id: string;
+  user_id: string;
+  language_code: string;
+  preference_level: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// Request/Response Types for Phase 3
+
+export interface CreateSurveyRequest {
+  title: string;
+  description?: string;
+  status?: SurveyStatus;
+  settings?: Record<string, unknown>;
+}
+
+export interface UpdateSurveyRequest {
+  title?: string;
+  description?: string;
+  status?: SurveyStatus;
+  settings?: Record<string, unknown>;
+  closed_at?: string;
+}
+
+export interface CreateSurveyQuestionRequest {
+  question_text: string;
+  question_type: SurveyQuestionType;
+  options?: SurveyQuestionOption[];
+  required?: boolean;
+  order_index?: number;
+}
+
+export interface SubmitSurveyResponseRequest {
+  respondent_id?: string;
+  respondent_email?: string;
+  answers: Array<{
+    question_id: string;
+    answer_text?: string;
+    answer_value?: unknown;
+  }>;
+  metadata?: Record<string, unknown>;
+}
+
+export interface ConfigureIntegrationRequest {
+  name: string;
+  config?: Record<string, unknown>;
+  credentials?: Record<string, unknown>;
+  is_active?: boolean;
+}
+
+export interface UpdateIntegrationRequest {
+  name?: string;
+  config?: Record<string, unknown>;
+  credentials?: Record<string, unknown>;
+  is_active?: boolean;
+}
+
+export interface AnalyticsQueryRequest {
+  startDate?: string;
+  endDate?: string;
+  metric?: string;
+  dimensions?: Record<string, unknown>;
+}
+
+export interface CreateCustomMetricRequest {
+  name: string;
+  description?: string;
+  formula: string;
+  chart_type?: 'line' | 'bar' | 'pie' | 'metric';
+}
+
+export interface UpdateCustomMetricRequest {
+  name?: string;
+  description?: string;
+  formula?: string;
+  chart_type?: 'line' | 'bar' | 'pie' | 'metric';
+  is_active?: boolean;
+}
+
+export interface CreateDashboardWidgetRequest {
+  name: string;
+  widget_type: 'metric' | 'chart' | 'table' | 'list';
+  metric_name?: string;
+  custom_metric_id?: string;
+  configuration?: Record<string, unknown>;
+  position_x?: number;
+  position_y?: number;
+  width?: number;
+  height?: number;
+}
+
+export interface UpdateDashboardWidgetRequest {
+  name?: string;
+  widget_type?: 'metric' | 'chart' | 'table' | 'list';
+  metric_name?: string;
+  custom_metric_id?: string;
+  configuration?: Record<string, unknown>;
+  position_x?: number;
+  position_y?: number;
+  width?: number;
+  height?: number;
+  is_visible?: boolean;
+}
+
+export interface AddProjectLanguageRequest {
+  language_code: string;
+  language_name: string;
+  is_default?: boolean;
+}
+
+export interface UpdateTranslationRequest {
+  value: string;
+  context?: string;
+  is_approved?: boolean;
+}
+
+export interface BulkUpdateTranslationsRequest {
+  translations: Array<{
+    key: string;
+    value: string;
+    context?: string;
+  }>;
+}
+
+export interface ImportTranslationsRequest {
+  format: 'json' | 'csv' | 'po';
+  content: string;
+  language_code: string;
+}
+
+export interface UpdateUserLanguagePreferenceRequest {
+  language_code: string;
+  preference_level: number;
+}
