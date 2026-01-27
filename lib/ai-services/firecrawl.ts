@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { env } from '../env';
 
 const FIRECRAWL_API_URL = 'https://api.firecrawl.dev/v1/scrape';
 
@@ -19,7 +20,7 @@ export async function scrapeAndExtractText(url: string): Promise<ScrapeResult> {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.FIRECRAWL_API_KEY}`,
+          Authorization: `Bearer ${env.FIRECRAWL_API_KEY}`,
         },
       }
     );

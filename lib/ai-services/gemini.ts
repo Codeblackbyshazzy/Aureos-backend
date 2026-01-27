@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { env } from '../env';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'placeholder');
+const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
 
 export interface ClusterResult {
   clusters: Array<{

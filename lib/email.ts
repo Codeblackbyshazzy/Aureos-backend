@@ -1,3 +1,4 @@
+import { env } from './env';
 import { createAdminClient } from '@/lib/supabase';
 import { sleep } from '@/lib/crypto-utils';
 
@@ -37,7 +38,7 @@ async function sendWithResend(params: {
   text?: string;
 }): Promise<{ id: string }>
 {
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = env.RESEND_API_KEY;
   if (!apiKey) {
     throw new Error('Missing RESEND_API_KEY');
   }
@@ -206,7 +207,7 @@ export async function sendEmail(params: {
 {
   const adminClient = createAdminClient();
 
-  const from = process.env.EMAIL_FROM;
+  const from = env.EMAIL_FROM;
   if (!from) {
     throw new Error('Missing EMAIL_FROM');
   }
@@ -246,7 +247,7 @@ export async function sendEmail(params: {
   const renderedHtml = html ? renderTemplate(html, variables) : undefined;
   const renderedText = text ? renderTemplate(text, variables) : undefined;
 
-  const provider = process.env.SENDGRID_API_KEY ? 'sendgrid' : 'resend';
+  const provider = env.SENDGRID_API_KEY ? 'sendgrid' : 'resend';
 
   let lastError: string | null = null;
 

@@ -1,3 +1,4 @@
+import { env } from './env';
 import { createAdminClient } from './supabase';
 import { z } from 'zod';
 
@@ -57,7 +58,7 @@ class GeminiAIService implements AIService {
   }): Promise<{ response: string; provider: string }> {
     const { GoogleGenerativeAI } = await import('@google/generative-ai');
     
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+    const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
     const prompt = this.buildAnalysisPrompt(feedbackItems, context);
@@ -117,7 +118,7 @@ class DeepSeekAIService implements AIService {
 
 // Factory for AI service selection
 function createAIService(): AIService {
-  const provider = (process.env.FEEDBACK_ANALYSIS_AI_PROVIDER || 'gemini').toLowerCase();
+  const provider = env.FEEDBACK_ANALYSIS_AI_PROVIDER.toLowerCase();
   
   switch (provider) {
     case 'deepseek':

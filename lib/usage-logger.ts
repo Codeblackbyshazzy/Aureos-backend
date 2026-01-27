@@ -1,3 +1,4 @@
+import { env } from './env';
 import { createAdminClient } from './supabase';
 import { AIService } from '@/types';
 
@@ -12,11 +13,11 @@ interface LogUsageParams {
 
 const COST_RATES = {
   gemini: {
-    input: parseFloat(process.env.GEMINI_INPUT_TOKEN_COST || '0.000001'),
-    output: parseFloat(process.env.GEMINI_OUTPUT_TOKEN_COST || '0.000002'),
+    input: env.GEMINI_INPUT_TOKEN_COST,
+    output: env.GEMINI_OUTPUT_TOKEN_COST,
   },
-  deepseek: parseFloat(process.env.DEEPSEEK_TOKEN_COST || '0.0000005'),
-  firecrawl: parseFloat(process.env.FIRECRAWL_CREDIT_COST || '0.01'),
+  deepseek: env.DEEPSEEK_TOKEN_COST,
+  firecrawl: env.FIRECRAWL_CREDIT_COST,
 };
 
 function calculateCost(

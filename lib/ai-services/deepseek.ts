@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { env } from '../env';
 
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
 
@@ -56,7 +57,7 @@ Only return the JSON array, no other text.`;
     {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.DEEPSEEK_API_KEY}`,
+        Authorization: `Bearer ${env.DEEPSEEK_API_KEY}`,
       },
     }
   );
@@ -120,7 +121,7 @@ Only return the JSON array, no other text.`;
     {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.DEEPSEEK_API_KEY}`,
+        Authorization: `Bearer ${env.DEEPSEEK_API_KEY}`,
       },
     }
   );

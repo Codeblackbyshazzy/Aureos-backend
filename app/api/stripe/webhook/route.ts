@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import { createAdminClient } from '@/lib/supabase';
+import { env } from '@/lib/env';
 import Stripe from 'stripe';
 
 function mapStripeSubscriptionStatus(
@@ -21,6 +22,17 @@ function mapStripeSubscriptionStatus(
 }
 
 export async function POST(req: NextRequest) {
+  if (!env.STRIPE_WEBHOOK_SECRET) {
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: "Webhook secret not configured", 
+        code: "CONFIGURATION_ERROR" 
+      }, 
+      { status: 400 }
+    );
+  }
+
   const body = await req.text();
   const signature = req.headers.get('stripe-signature');
 
@@ -34,10 +46,20 @@ export async function POST(req: NextRequest) {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      env.STRIPE_WEBHOOK_SECRET
     );
-  } catch (error) {
-    console.error('Webhook signature verification failed:', error);
+  } catch (error: any) {
+    let event_type = 'unknown';
+    try {
+      const bodyObj = JSON.parse(body);
+      event_type = bodyObj.type;
+    } catch (e) {}
+
+    console.error('Webhook signature verification failed:', {
+      timestamp: new Date().toISOString(),
+      signature_provided: signature,
+      event_type: event_type
+    });
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
   }
 
