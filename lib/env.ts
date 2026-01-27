@@ -44,6 +44,8 @@ const envSchema = z.object({
   RATE_LIMIT_FREE: z.coerce.number().default(10),
   RATE_LIMIT_STARTER: z.coerce.number().default(50),
   RATE_LIMIT_PRO: z.coerce.number().default(100),
+  RATE_LIMIT_PUBLIC_FEEDBACK: z.coerce.number().default(20),
+  RATE_LIMIT_ANALYZE_PER_USER: z.coerce.number().default(5),
 
   // Plan Limits
   PLAN_FREE_FEEDBACK_LIMIT: z.coerce.number().default(50),
