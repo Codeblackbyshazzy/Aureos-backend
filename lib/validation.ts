@@ -180,7 +180,7 @@ export const createSurveySchema = z.object({
     .optional()
     .transform(v => v ? sanitizeUserInput(v) : v),
   status: z.enum(['draft', 'active', 'closed']).optional(),
-  settings: z.record(z.string(), z.any()).optional()
+  settings: z.record(z.string(), z.any()).optional().default({})
 });
 
 export const updateSurveySchema = z.object({

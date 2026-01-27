@@ -40,7 +40,7 @@ export async function GET(
     // Fetch surveys with pagination
     const { data: surveys, error: surveysError, count } = await supabase
       .from('surveys')
-      .select('*', { count: 'exact' })
+      .select('id, project_id, title, description, status, is_nps, settings, created_by, created_at, updated_at, closed_at', { count: 'exact' })
       .eq('project_id', params.projectId)
       .order('created_at', { ascending: false })
       .range(offset, offset + paginationResult.limit - 1);
@@ -97,6 +97,7 @@ export async function POST(
         title: surveyData.title,
         description: surveyData.description || null,
         status: surveyData.status || 'draft',
+        is_nps: surveyData.settings?.is_nps || false,
         settings: surveyData.settings || {},
         created_by: surveyData.created_by
       })

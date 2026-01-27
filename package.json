@@ -15,12 +15,12 @@
     "@supabase/supabase-js": "^2.89.0",
     "@upstash/redis": "^1.36.1",
     "axios": "^1.13.2",
-    "next": "16.1.1",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
+    "isomorphic-dompurify": "^2.11.0",
+    "next": "^16.1.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "stripe": "^20.1.0",
-    "zod": "^4.3.4",
-    "isomorphic-dompurify": "^2.11.0"
+    "zod": "^4.3.4"
   },
   "devDependencies": {
     "@types/node": "^20",

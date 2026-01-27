@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase';
 import { requireAuth } from '@/lib/auth';
 import { handleError } from '@/lib/errors';
-import { submitSurveyResponseSchema, paginationSchema } from '@/lib/validation';
+import { paginationSchema } from '@/lib/validation';
 import { 
   SurveyResponse, 
   SurveyAnswer,
@@ -10,72 +10,19 @@ import {
   PaginatedResponse 
 } from '@/types';
 
-/**
- * POST /api/projects/[projectId]/surveys/[surveyId]/responses
- * Submit a response to a survey
- */
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { projectId: string; surveyId: string } }
-): Promise<NextResponse<ApiResponse<SurveyResponse>>> {
-  try {
-    const { user } = await requireAuth();
-    const supabase = createServerClient();
-    
-    // Parse and validate request body
-    const body = await request.json();
-    const validatedData = submitSurveyResponseSchema.parse(body);
-    
-    // Create survey response
-    const { data: response, error: responseError } = await supabase
-      .from('survey_responses')
-      .insert({
-        survey_id: params.surveyId,
-        respondent_id: validatedData.respondent_id || user.id,
-        respondent_email: validatedData.respondent_email || null,
-        metadata: validatedData.metadata || {}
-      })
-      .select()
-      .single();
-    
-    if (responseError) {
-      return handleError(responseError);
-    }
-    
-    // Create survey answers
-    const answersToInsert = validatedData.answers.map(answer => ({
-      response_id: response.id,
-      question_id: answer.question_id,
-      answer_text: answer.answer_text || null,
-      answer_value: answer.answer_value || null
-    }));
-    
-    const { error: answersError } = await supabase
-      .from('survey_answers')
-      .insert(answersToInsert);
-    
-    if (answersError) {
-      return handleError(answersError);
-    }
-    
-    return NextResponse.json({
-      success: true,
-      data: response
-    });
-    
-  } catch (error) {
-    return handleError(error);
-  }
+// Extend SurveyResponse to include answers for this endpoint
+interface SurveyResponseWithAnswers extends SurveyResponse {
+  answers: SurveyAnswer[];
 }
 
 /**
  * GET /api/projects/[projectId]/surveys/[surveyId]/responses
- * Get all responses for a survey
+ * Get all responses for a survey (authenticated users only)
  */
 export async function GET(
   request: NextRequest,
   { params }: { params: { projectId: string; surveyId: string } }
-): Promise<NextResponse<ApiResponse<PaginatedResponse<SurveyResponse>>>> {
+): Promise<NextResponse<ApiResponse<PaginatedResponse<SurveyResponseWithAnswers>>>> {
   try {
     await requireAuth();
     
@@ -127,7 +74,7 @@ export async function GET(
       
       // Add answers to responses
       responses.forEach(response => {
-        response.answers = answersByResponse[response.id] || [];
+        (response as SurveyResponseWithAnswers).answers = answersByResponse[response.id] || [];
       });
     }
     
@@ -136,7 +83,7 @@ export async function GET(
     return NextResponse.json({
       success: true,
       data: {
-        data: responses || [],
+        data: (responses as SurveyResponseWithAnswers[]) || [],
         total: count || 0,
         page: paginationResult.page,
         limit: paginationResult.limit,
