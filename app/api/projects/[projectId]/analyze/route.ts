@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import { getProjectWithOwnership, checkPlanLimit } from '@/lib/project-utils';
-import { handleError } from '@/lib/errors';
+import { handleError, createRateLimitResponse } from '@/lib/errors';
 import { analyzeFeedback } from '@/lib/feedback-analysis';
 import { z } from 'zod';
-import { checkRateLimit, getRateLimitHeaders } from '@/lib/rate-limiter';
+import { checkAnonymousRateLimit, getRateLimitHeaders } from '@/lib/rate-limiter';
 
 const analyzeRequestSchema = z.object({
   projectId: z.string().uuid()
@@ -12,10 +12,10 @@ const analyzeRequestSchema = z.object({
 
 /**
  * POST /api/projects/[projectId]/analyze
- * 
+ *
  * Performs automated feedback clustering, theme extraction, and roadmap prioritization
  * using AI analysis (Gemini/DeepSeek).
- * 
+ *
  * @param request - Next.js request object
  * @param params - Route parameters containing projectId
  * @returns Analysis results with clusters and roadmap items
@@ -26,25 +26,15 @@ export async function POST(
 ) {
   try {
     const { projectId } = params;
-    
+
     // Auth check - user must have access to project
     const user = await requireAuth();
     const project = await getProjectWithOwnership(projectId, user.id);
 
-    // Check rate limit based on user's plan
-    const rateLimitResult = checkRateLimit(user.id, project.plan);
+    // Rate limit to 5/min per user for AI analysis (expensive operation)
+    const rateLimitResult = await checkAnonymousRateLimit(user.id, 5);
     if (!rateLimitResult.allowed) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Rate limit exceeded. Please try again later.',
-          code: 'RATE_LIMIT_EXCEEDED'
-        },
-        { 
-          status: 429,
-          headers: getRateLimitHeaders(rateLimitResult)
-        }
-      );
+      return createRateLimitResponse(rateLimitResult.resetAt);
     }
 
     // Check plan limit for AI analysis feature

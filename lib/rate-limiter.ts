@@ -1,12 +1,7 @@
 import { Plan, UserRole } from '@/types';
 import { getUserPlan } from '@/lib/project-utils';
 import { RateLimitError } from '@/lib/errors';
-
-import { env } from './env';
-
-// In-memory rate limiting store (for production, use Redis)
-const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
-const anonymousRateLimitStore = new Map<string, { count: number; resetAt: number }>();
+import { redis } from './redis';
 
 interface RateLimitConfig {
   free: number;
@@ -15,9 +10,9 @@ interface RateLimitConfig {
 }
 
 const RATE_LIMITS: RateLimitConfig = {
-  free: env.RATE_LIMIT_FREE,
-  starter: env.RATE_LIMIT_STARTER,
-  pro: env.RATE_LIMIT_PRO,
+  free: 10,
+  starter: 50,
+  pro: 100,
 };
 
 const WINDOW_MS = 60 * 1000; // 1 minute
@@ -31,85 +26,82 @@ export interface RateLimitResult {
 
 /**
  * Checks whether a request is allowed under the per-minute rate limit for a given user.
+ * Uses Redis for distributed rate limiting across all serverless instances.
  */
-export function checkRateLimit(userId: string, plan: Plan): RateLimitResult {
-  const now = Date.now();
-  const key = `${userId}:${Math.floor(now / WINDOW_MS)}`;
-  const limit = RATE_LIMITS[plan];
+export async function checkRateLimit(userId: string, plan: Plan): Promise<RateLimitResult> {
+  try {
+    const now = Date.now();
+    const windowStart = Math.floor(now / WINDOW_MS) * WINDOW_MS;
+    const resetAt = windowStart + WINDOW_MS;
+    const limit = RATE_LIMITS[plan];
+    const key = `ratelimit:user:${userId}:${windowStart}`;
 
-  // Clean up old entries
-  for (const [k, v] of rateLimitStore.entries()) {
-    if (v.resetAt < now) {
-      rateLimitStore.delete(k);
+    const currentCount = await redis.get<number>(key) || 0;
+    const allowed = currentCount < limit;
+
+    if (allowed) {
+      await redis.incr(key);
+      await redis.expire(key, 90);
     }
-  }
 
-  let record = rateLimitStore.get(key);
-
-  if (!record) {
-    record = {
-      count: 0,
-      resetAt: Math.floor(now / WINDOW_MS) * WINDOW_MS + WINDOW_MS,
+    return {
+      allowed,
+      limit,
+      remaining: Math.max(0, limit - (currentCount + (allowed ? 1 : 0))),
+      resetAt,
     };
-    rateLimitStore.set(key, record);
+  } catch (error) {
+    console.warn('Redis unavailable, allowing request (fail open):', error);
+    return {
+      allowed: true,
+      limit: RATE_LIMITS.free,
+      remaining: Number.MAX_SAFE_INTEGER,
+      resetAt: Math.floor(Date.now() / WINDOW_MS) * WINDOW_MS + WINDOW_MS,
+    };
   }
-
-  const allowed = record.count < limit;
-
-  if (allowed) {
-    record.count++;
-  }
-
-  return {
-    allowed,
-    limit,
-    remaining: Math.max(0, limit - record.count),
-    resetAt: record.resetAt,
-  };
 }
 
 /**
- * Rate limiting for unauthenticated endpoints (keyed by an arbitrary identifier, e.g. IP).
+ * Rate limiting for unauthenticated endpoints (keyed by an arbitrary identifier, e.g. IP hash).
+ * Uses Redis for distributed rate limiting across all serverless instances.
  */
-export function checkAnonymousRateLimit(identifier: string, limit: number): RateLimitResult {
-  const now = Date.now();
-  const key = `${identifier}:${Math.floor(now / WINDOW_MS)}`;
+export async function checkAnonymousRateLimit(identifier: string, limit: number): Promise<RateLimitResult> {
+  try {
+    const now = Date.now();
+    const windowStart = Math.floor(now / WINDOW_MS) * WINDOW_MS;
+    const resetAt = windowStart + WINDOW_MS;
+    const key = `ratelimit:ip:${identifier}:${windowStart}`;
 
-  for (const [k, v] of anonymousRateLimitStore.entries()) {
-    if (v.resetAt < now) {
-      anonymousRateLimitStore.delete(k);
+    const currentCount = await redis.get<number>(key) || 0;
+    const allowed = currentCount < limit;
+
+    if (allowed) {
+      await redis.incr(key);
+      await redis.expire(key, 90);
     }
-  }
 
-  let record = anonymousRateLimitStore.get(key);
-
-  if (!record) {
-    record = {
-      count: 0,
-      resetAt: Math.floor(now / WINDOW_MS) * WINDOW_MS + WINDOW_MS,
+    return {
+      allowed,
+      limit,
+      remaining: Math.max(0, limit - (currentCount + (allowed ? 1 : 0))),
+      resetAt,
     };
-    anonymousRateLimitStore.set(key, record);
+  } catch (error) {
+    console.warn('Redis unavailable, allowing request (fail open):', error);
+    return {
+      allowed: true,
+      limit,
+      remaining: Number.MAX_SAFE_INTEGER,
+      resetAt: Math.floor(Date.now() / WINDOW_MS) * WINDOW_MS + WINDOW_MS,
+    };
   }
-
-  const allowed = record.count < limit;
-
-  if (allowed) {
-    record.count++;
-  }
-
-  return {
-    allowed,
-    limit,
-    remaining: Math.max(0, limit - record.count),
-    resetAt: record.resetAt,
-  };
 }
 
 /**
  * Applies anonymous rate limiting and throws {@link RateLimitError} when exceeded.
  */
-export function applyAnonymousRateLimit(identifier: string, limit: number): RateLimitResult {
-  const result = checkAnonymousRateLimit(identifier, limit);
+export async function applyAnonymousRateLimit(identifier: string, limit: number): Promise<RateLimitResult> {
+  const result = await checkAnonymousRateLimit(identifier, limit);
   if (!result.allowed) {
     throw new RateLimitError(result.resetAt);
   }
@@ -140,7 +132,7 @@ export async function applyRateLimit(
   }
 
   const resolvedPlan = plan ?? (await getUserPlan(userId));
-  const result = checkRateLimit(userId, resolvedPlan);
+  const result = await checkRateLimit(userId, resolvedPlan);
 
   if (!result.allowed) {
     throw new RateLimitError(result.resetAt);
@@ -149,10 +141,33 @@ export async function applyRateLimit(
   return result;
 }
 
+/**
+ * Generates rate limit headers from a RateLimitResult.
+ */
 export function getRateLimitHeaders(result: RateLimitResult): Record<string, string> {
-  return {
+  const headers: Record<string, string> = {
     'X-RateLimit-Limit': result.limit.toString(),
     'X-RateLimit-Remaining': result.remaining.toString(),
     'X-RateLimit-Reset': new Date(result.resetAt).toISOString(),
   };
+
+  const now = Date.now();
+  const retryAfter = Math.max(0, Math.ceil((result.resetAt - now) / 1000));
+  if (retryAfter > 0 && !result.allowed) {
+    headers['Retry-After'] = retryAfter.toString();
+  }
+
+  return headers;
+}
+
+/**
+ * Checks if Redis is available by attempting a ping.
+ */
+export async function isRedisAvailable(): Promise<boolean> {
+  try {
+    await redis.ping();
+    return true;
+  } catch {
+    return false;
+  }
 }

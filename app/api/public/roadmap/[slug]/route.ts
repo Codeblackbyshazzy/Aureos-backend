@@ -1,12 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase';
-import { handleError } from '@/lib/errors';
+import { handleError, createRateLimitResponse } from '@/lib/errors';
+import { getClientIp } from '@/lib/ip-utils';
+import { checkAnonymousRateLimit, getRateLimitHeaders } from '@/lib/rate-limiter';
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    // Rate limiting for public endpoint (100/min per IP)
+    const ipHash = await getClientIp(req);
+    const rateLimitResult = await checkAnonymousRateLimit(ipHash, 100);
+    if (!rateLimitResult.allowed) {
+      return createRateLimitResponse(rateLimitResult.resetAt);
+    }
+
     const { slug } = await params;
     const adminClient = createAdminClient();
     
@@ -39,17 +48,20 @@ export async function GET(
     if (itemsError) {
       throw new Error('Failed to fetch roadmap items');
     }
-    
-    return NextResponse.json({
-      success: true,
-      data: {
-        project: {
-          name: project.name,
-          slug: project.slug,
+
+    return NextResponse.json(
+      {
+        success: true,
+        data: {
+          project: {
+            name: project.name,
+            slug: project.slug,
+          },
+          roadmap: roadmapItems || [],
         },
-        roadmap: roadmapItems || [],
       },
-    });
+      { headers: getRateLimitHeaders(rateLimitResult) }
+    );
   } catch (error) {
     return handleError(error);
   }

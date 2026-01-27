@@ -4,7 +4,8 @@ import { getProjectWithOwnership, requirePaidPlan } from '@/lib/project-utils';
 import { createAdminClient } from '@/lib/supabase';
 import { clusterFeedbackWithFallback } from '@/lib/ai-services';
 import { logApiUsage } from '@/lib/usage-logger';
-import { handleError } from '@/lib/errors';
+import { handleError, createRateLimitResponse } from '@/lib/errors';
+import { applyRateLimit } from '@/lib/rate-limiter';
 
 export async function POST(
   req: NextRequest,
@@ -14,7 +15,13 @@ export async function POST(
     const { id: projectId } = await params;
     const user = await requireAuth();
     const project = await getProjectWithOwnership(projectId, user.id);
-    
+
+    // Rate limiting (authenticated users - by plan)
+    const rateLimitResult = await applyRateLimit(user.id, user.role, project.plan);
+    if (!rateLimitResult.allowed) {
+      return createRateLimitResponse(rateLimitResult.resetAt);
+    }
+
     // Require paid plan for AI clustering
     requirePaidPlan(project.plan);
     
