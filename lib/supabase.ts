@@ -1,9 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
+import { env } from './env';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder';
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder';
+const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseServiceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY;
 
 // Client for use in client components
 export const createBrowserClient = () => {

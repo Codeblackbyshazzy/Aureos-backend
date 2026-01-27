@@ -87,6 +87,39 @@ npm install
 cp .env.example .env.local
 ```
 
+## Environment Variables Setup
+
+The application requires several environment variables to be set for it to function correctly. A validation step runs at startup to ensure all critical variables are present and correctly formatted.
+
+**Warning: The app will not start without critical environment variables.**
+
+### Required Variables
+
+| Variable | Description | Format |
+|----------|-------------|--------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL | URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key | String (min 20 chars) |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key | String (min 20 chars) |
+| `STRIPE_SECRET_KEY` | Stripe secret key | Starts with `sk_` |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret | String (min 20 chars) |
+| `STRIPE_PRICE_STARTER_MONTHLY` | Stripe Price ID for Starter Monthly | `price_...` |
+| `STRIPE_PRICE_STARTER_YEARLY` | Stripe Price ID for Starter Yearly | `price_...` |
+| `STRIPE_PRICE_PRO_MONTHLY` | Stripe Price ID for Pro Monthly | `price_...` |
+| `STRIPE_PRICE_PRO_YEARLY` | Stripe Price ID for Pro Yearly | `price_...` |
+| `GEMINI_API_KEY` | Google Gemini API key | String |
+
+### Optional Variables
+
+| Variable | Description | Default / Note |
+|----------|-------------|----------------|
+| `DEEPSEEK_API_KEY` | DeepSeek API key | Optional fallback |
+| `ADMIN_EMAILS` | Comma-separated admin emails | e.g. `a@b.com,c@d.com` |
+| `UPSTASH_REDIS_URL` | Redis URL for rate limiting | Optional |
+| `UPSTASH_REDIS_TOKEN` | Redis token | Optional |
+| `NEXT_PUBLIC_APP_URL` | Base URL of the application | `http://localhost:3000` |
+
+See [.env.example](/.env.example) for a complete template.
+
 ### 2. Supabase Setup (Step-by-Step)
 
 1. **Create Supabase Project**
@@ -236,45 +269,6 @@ cp .env.example .env.local
    ```env
    FIRECRAWL_API_KEY=fc_your_firecrawl_api_key
    ```
-
-### 5. Environment Variables Setup
-
-After copying `.env.example` to `.env.local`, fill in all variables:
-
-```env
-# Supabase Configuration (from Project Settings > API)
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGc...
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGc...
-
-# Admin Configuration (your email for admin access)
-ADMIN_EMAILS=your-admin-email@example.com
-
-# Stripe Configuration (from Stripe Dashboard)
-STRIPE_SECRET_KEY=sk_test_your_secret_key
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key
-STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
-
-# Stripe Price IDs (from Products in Stripe)
-STRIPE_PRICE_STARTER_MONTHLY=price_your_starter_monthly
-STRIPE_PRICE_STARTER_YEARLY=price_your_starter_yearly
-STRIPE_PRICE_PRO_MONTHLY=price_your_pro_monthly
-STRIPE_PRICE_PRO_YEARLY=price_your_pro_yearly
-
-# AI Services
-GEMINI_API_KEY=AI_your_gemini_key
-DEEPSEEK_API_KEY=sk_your_deepseek_key
-FIRECRAWL_API_KEY=fc_your_firecrawl_key
-
-# Optional: Cost Tracking (defaults shown)
-GEMINI_INPUT_TOKEN_COST=0.000001
-GEMINI_OUTPUT_TOKEN_COST=0.000002
-DEEPSEEK_TOKEN_COST=0.0000005
-FIRECRAWL_CREDIT_COST=0.01
-
-# Application URL
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-```
 
 ### 6. Admin User Setup
 

@@ -1,3 +1,4 @@
+import { env } from './env';
 import { z } from 'zod';
 import { createAdminClient } from '@/lib/supabase';
 import { createJwtHS256, randomToken, sha256Hex, verifyJwtHS256 } from '@/lib/crypto-utils';
@@ -27,7 +28,7 @@ export interface GuestSessionRecord {
 }
 
 function getGuestSecret(): string {
-  const secret = process.env.GUEST_JWT_SECRET;
+  const secret = env.GUEST_JWT_SECRET;
   if (!secret) {
     throw new Error('Missing GUEST_JWT_SECRET');
   }

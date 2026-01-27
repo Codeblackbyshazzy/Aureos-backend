@@ -1,8 +1,9 @@
 import Stripe from 'stripe';
 import { createAdminClient } from './supabase';
 import { Subscription } from '@/types';
+import { env } from './env';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder', {
+const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: '2025-12-15.clover',
 });
 
@@ -59,12 +60,12 @@ export async function createCheckoutSession(
 
   const priceIds = {
     starter: {
-      monthly: process.env.STRIPE_PRICE_STARTER_MONTHLY!,
-      yearly: process.env.STRIPE_PRICE_STARTER_YEARLY!,
+      monthly: env.STRIPE_PRICE_STARTER_MONTHLY,
+      yearly: env.STRIPE_PRICE_STARTER_YEARLY,
     },
     pro: {
-      monthly: process.env.STRIPE_PRICE_PRO_MONTHLY!,
-      yearly: process.env.STRIPE_PRICE_PRO_YEARLY!,
+      monthly: env.STRIPE_PRICE_PRO_MONTHLY,
+      yearly: env.STRIPE_PRICE_PRO_YEARLY,
     },
   };
 
@@ -78,8 +79,8 @@ export async function createCheckoutSession(
         quantity: 1,
       },
     ],
-    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
+    success_url: `${env.NEXT_PUBLIC_APP_URL}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${env.NEXT_PUBLIC_APP_URL}/pricing`,
     metadata: {
       user_id: userId,
       plan,
@@ -93,7 +94,7 @@ export async function createCheckoutSession(
 export async function createPortalSession(customerId: string): Promise<string> {
   const session = await stripe.billingPortal.sessions.create({
     customer: customerId,
-    return_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
+    return_url: `${env.NEXT_PUBLIC_APP_URL}/dashboard`,
   });
 
   return session.url;

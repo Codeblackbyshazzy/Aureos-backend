@@ -1,3 +1,4 @@
+import { env } from './env';
 import { z } from 'zod';
 import { createJwtHS256, verifyJwtHS256 } from '@/lib/crypto-utils';
 
@@ -22,7 +23,7 @@ export interface CreateSsoAccessTokenParams {
  * Creates an internal Aureos access token for an SSO session.
  */
 export function createSsoAccessToken(params: CreateSsoAccessTokenParams): string {
-  const secret = process.env.INTERNAL_AUTH_JWT_SECRET;
+  const secret = env.INTERNAL_AUTH_JWT_SECRET;
   if (!secret) {
     throw new Error('Missing INTERNAL_AUTH_JWT_SECRET');
   }
@@ -45,7 +46,7 @@ export function createSsoAccessToken(params: CreateSsoAccessTokenParams): string
  * Verifies an internal Aureos access token.
  */
 export function verifyInternalAccessToken(token: string): InternalAccessTokenPayload {
-  const secret = process.env.INTERNAL_AUTH_JWT_SECRET;
+  const secret = env.INTERNAL_AUTH_JWT_SECRET;
   if (!secret) {
     throw new Error('Missing INTERNAL_AUTH_JWT_SECRET');
   }

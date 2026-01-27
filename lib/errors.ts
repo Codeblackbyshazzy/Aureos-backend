@@ -31,108 +31,78 @@ export class RateLimitError extends Error {
   }
 }
 
+export function sanitizeErrorMessage(text: string): string {
+  if (!text) return text;
+  
+  return text
+    .replace(/(api_key|secret|token|password|authorization)[:=\s]+\S+/gi, (match, p1) => `${p1}: [REDACTED]`)
+    .replace(/process\.env\.\w+/g, '[REDACTED_ENV]')
+    .substring(0, 500);
+}
+
+export const logger = {
+  error: (message: string, error: any, context?: any) => {
+    console.error(message, {
+      ...context,
+      error: error instanceof Error ? {
+        message: sanitizeErrorMessage(error.message),
+        name: error.name,
+      } : error,
+      timestamp: new Date().toISOString(),
+    });
+  }
+};
+
 export function handleError(error: unknown): NextResponse<ErrorResponse> {
-  console.error('API Error:', error);
+  let statusCode = 500;
+  let code = 'INTERNAL_ERROR';
+  let message = 'An unexpected error occurred';
 
   if (error instanceof RateLimitError) {
     return createRateLimitResponse(error.resetAt);
   }
 
-  // Validation errors
   if (error instanceof ZodError) {
-    const zodError = error as ZodError;
-    return NextResponse.json(
-      {
-        success: false,
-        error: zodError.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', '),
-        code: 'VALIDATION_ERROR',
-      },
-      { status: 400 }
-    );
-  }
+    statusCode = 400;
+    code = 'VALIDATION_ERROR';
+    message = error.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
+  } else if (error instanceof Error) {
+    message = error.message;
+    code = 'ERROR';
+    statusCode = 400;
 
-  // Known errors with messages
-  if (error instanceof Error) {
-    const message = error.message;
-
-    // Auth errors
     if (message === 'Unauthorized') {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Authentication required',
-          code: 'UNAUTHORIZED',
-        },
-        { status: 401 }
-      );
+      statusCode = 401;
+      code = 'UNAUTHORIZED';
+      message = 'Authentication required';
+    } else if (message.startsWith('Forbidden')) {
+      statusCode = 403;
+      code = 'FORBIDDEN';
+    } else if (message.includes('not found')) {
+      statusCode = 404;
+      code = 'NOT_FOUND';
+    } else if (message.includes('limit reached') || message.includes('requires')) {
+      statusCode = 403;
+      code = 'PLAN_LIMIT_EXCEEDED';
+    } else if (message.includes('AI services failed') || message.includes('failed to')) {
+      statusCode = 503;
+      code = 'SERVICE_ERROR';
     }
-
-    if (message.startsWith('Forbidden')) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: message,
-          code: 'FORBIDDEN',
-        },
-        { status: 403 }
-      );
-    }
-
-    // Not found errors
-    if (message.includes('not found')) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: message,
-          code: 'NOT_FOUND',
-        },
-        { status: 404 }
-      );
-    }
-
-    // Plan limit errors
-    if (message.includes('limit reached') || message.includes('requires')) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: message,
-          code: 'PLAN_LIMIT_EXCEEDED',
-        },
-        { status: 403 }
-      );
-    }
-
-    // AI service errors
-    if (message.includes('AI services failed') || message.includes('failed to')) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: message,
-          code: 'SERVICE_ERROR',
-        },
-        { status: 503 }
-      );
-    }
-
-    // Generic error with message
-    return NextResponse.json(
-      {
-        success: false,
-        error: message,
-        code: 'ERROR',
-      },
-      { status: 400 }
-    );
   }
 
-  // Unknown errors
+  logger.error('API error occurred', error, {
+    code: 'API_ERROR',
+    message: sanitizeErrorMessage(error instanceof Error ? error.message : String(error)),
+    status: statusCode
+  });
+
   return NextResponse.json(
     {
       success: false,
-      error: 'An unexpected error occurred',
-      code: 'INTERNAL_ERROR',
+      error: message,
+      code: code,
     },
-    { status: 500 }
+    { status: statusCode }
   );
 }
 

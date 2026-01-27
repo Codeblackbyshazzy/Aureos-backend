@@ -1,3 +1,4 @@
+import { env } from './env';
 import { headers } from 'next/headers';
 import { NextRequest } from 'next/server';
 import { createAdminClient, createServerClient } from './supabase';
@@ -112,7 +113,7 @@ export async function requireAdmin(): Promise<User> {
 }
 
 export function isAdminEmail(email: string): boolean {
-  const adminEmails = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim()) || [];
+  const adminEmails = env.ADMIN_EMAILS?.split(',').map(e => e.trim()) || [];
   return adminEmails.includes(email);
 }
 

@@ -1,10 +1,11 @@
+import { env } from './env';
 import { createAdminClient } from './supabase';
 import { Plan, Project, UserRole } from '@/types';
 
 const PLAN_LIMITS = {
-  free: parseInt(process.env.PLAN_FREE_FEEDBACK_LIMIT || '50'),
-  starter: parseInt(process.env.PLAN_STARTER_FEEDBACK_LIMIT || '500'),
-  pro: parseInt(process.env.PLAN_PRO_FEEDBACK_LIMIT || '10000'),
+  free: env.PLAN_FREE_FEEDBACK_LIMIT,
+  starter: env.PLAN_STARTER_FEEDBACK_LIMIT,
+  pro: env.PLAN_PRO_FEEDBACK_LIMIT,
 };
 
 export async function getProjectWithOwnership(projectId: string, userId: string): Promise<Project> {

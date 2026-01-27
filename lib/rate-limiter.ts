@@ -2,6 +2,8 @@ import { Plan, UserRole } from '@/types';
 import { getUserPlan } from '@/lib/project-utils';
 import { RateLimitError } from '@/lib/errors';
 
+import { env } from './env';
+
 // In-memory rate limiting store (for production, use Redis)
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
 const anonymousRateLimitStore = new Map<string, { count: number; resetAt: number }>();
@@ -13,9 +15,9 @@ interface RateLimitConfig {
 }
 
 const RATE_LIMITS: RateLimitConfig = {
-  free: parseInt(process.env.RATE_LIMIT_FREE || '10'),
-  starter: parseInt(process.env.RATE_LIMIT_STARTER || '30'),
-  pro: parseInt(process.env.RATE_LIMIT_PRO || '100'),
+  free: env.RATE_LIMIT_FREE,
+  starter: env.RATE_LIMIT_STARTER,
+  pro: env.RATE_LIMIT_PRO,
 };
 
 const WINDOW_MS = 60 * 1000; // 1 minute

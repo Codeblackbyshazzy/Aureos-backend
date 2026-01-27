@@ -1,3 +1,4 @@
+import { env } from './env';
 import { logApiUsage } from './usage-logger';
 import { createServerClient, createAdminClient } from './supabase';
 import { SentimentAnalysis } from '../types';
@@ -15,8 +16,13 @@ export async function analyzeSentiment(text: string): Promise<SentimentResult> {
     const result = await callAIService(text);
     
     // Log API usage
-    await logApiUsage('gemini', 1000, 0.01, 'sentiment-analysis', {
-      text_length: text.length
+    await logApiUsage({
+      userId: null,
+      projectId: null,
+      service: 'gemini',
+      tokensOrCredits: 1000,
+      endpoint: 'sentiment-analysis',
+      metadata: { text_length: text.length }
     });
 
     return result;
@@ -46,12 +52,16 @@ Respond in JSON format:
   "keywords": ["keyword1", "keyword2"]
 }`;
 
+  if (!env.AI_SERVICE_URL || !env.AI_SERVICE_KEY) {
+    throw new Error('AI service not configured');
+  }
+
   // This would call your AI service (Gemini/DeepSeek)
-  const response = await fetch(`${process.env.AI_SERVICE_URL}/analyze`, {
+  const response = await fetch(`${env.AI_SERVICE_URL}/analyze`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.AI_SERVICE_KEY}`
+      'Authorization': `Bearer ${env.AI_SERVICE_KEY}`
     },
     body: JSON.stringify({
       prompt,
