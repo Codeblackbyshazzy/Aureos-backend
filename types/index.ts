@@ -806,6 +806,7 @@ export interface Survey {
   title: string;
   description: string | null;
   status: SurveyStatus;
+  is_nps: boolean;
   settings: Record<string, unknown>;
   created_by: string | null;
   created_at: string;
@@ -1002,6 +1003,7 @@ export interface CreateSurveyRequest {
   description?: string;
   status?: SurveyStatus;
   settings?: Record<string, unknown>;
+  is_nps?: boolean;
 }
 
 export interface UpdateSurveyRequest {
