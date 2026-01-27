@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
+import { sanitizeForLog } from '@/lib/sanitizer';
 
 export const ErrorCodes = {
   ALREADY_VOTED: 'ALREADY_VOTED',
@@ -31,79 +32,66 @@ export class RateLimitError extends Error {
   }
 }
 
-export function sanitizeErrorMessage(text: string): string {
-  if (!text) return text;
-  
-  return text
-    .replace(/(api_key|secret|token|password|authorization)[:=\s]+\S+/gi, (match, p1) => `${p1}: [REDACTED]`)
-    .replace(/process\.env\.\w+/g, '[REDACTED_ENV]')
-    .substring(0, 500);
-}
-
-export const logger = {
-  error: (message: string, error: any, context?: any) => {
-    console.error(message, {
-      ...context,
-      error: error instanceof Error ? {
-        message: sanitizeErrorMessage(error.message),
-        name: error.name,
-      } : error,
-      timestamp: new Date().toISOString(),
-    });
-  }
-};
-
 export function handleError(error: unknown): NextResponse<ErrorResponse> {
-  let statusCode = 500;
-  let code = 'INTERNAL_ERROR';
-  let message = 'An unexpected error occurred';
-
+  // Sanitize error message before logging
+  let sanitizedMessage = '';
+  
+  if (error instanceof Error) {
+    sanitizedMessage = sanitizeForLog(error.message);
+  } else {
+    sanitizedMessage = sanitizeForLog(String(error));
+  }
+  
+  console.error('API error', {
+    message: sanitizedMessage,
+    code: 'API_ERROR',
+    timestamp: new Date().toISOString(),
+  });
+  
+  // Don't expose internal errors to client
+  if (error instanceof ZodError) {
+    return NextResponse.json({
+      success: false,
+      error: 'Validation failed',
+      code: 'VALIDATION_ERROR',
+    }, { status: 400 });
+  }
+  
   if (error instanceof RateLimitError) {
     return createRateLimitResponse(error.resetAt);
   }
 
-  if (error instanceof ZodError) {
-    statusCode = 400;
-    code = 'VALIDATION_ERROR';
-    message = error.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
-  } else if (error instanceof Error) {
-    message = error.message;
-    code = 'ERROR';
-    statusCode = 400;
-
-    if (message === 'Unauthorized') {
-      statusCode = 401;
-      code = 'UNAUTHORIZED';
-      message = 'Authentication required';
-    } else if (message.startsWith('Forbidden')) {
-      statusCode = 403;
-      code = 'FORBIDDEN';
-    } else if (message.includes('not found')) {
-      statusCode = 404;
-      code = 'NOT_FOUND';
-    } else if (message.includes('limit reached') || message.includes('requires')) {
-      statusCode = 403;
-      code = 'PLAN_LIMIT_EXCEEDED';
-    } else if (message.includes('AI services failed') || message.includes('failed to')) {
-      statusCode = 503;
-      code = 'SERVICE_ERROR';
+  // Handle specific safe errors if needed, but the requirement says generic error
+  if (error instanceof Error) {
+    if (error.message === 'Unauthorized') {
+      return NextResponse.json({
+        success: false,
+        error: 'Authentication required',
+        code: 'UNAUTHORIZED',
+      }, { status: 401 });
+    }
+    if (error.message.startsWith('Forbidden')) {
+      return NextResponse.json({
+        success: false,
+        error: 'Access denied',
+        code: 'FORBIDDEN',
+      }, { status: 403 });
+    }
+    if (error.message.includes('not found')) {
+      return NextResponse.json({
+        success: false,
+        error: 'Resource not found',
+        code: 'NOT_FOUND',
+      }, { status: 404 });
     }
   }
-
-  logger.error('API error occurred', error, {
-    code: 'API_ERROR',
-    message: sanitizeErrorMessage(error instanceof Error ? error.message : String(error)),
-    status: statusCode
-  });
-
-  return NextResponse.json(
-    {
-      success: false,
-      error: message,
-      code: code,
-    },
-    { status: statusCode }
-  );
+  
+  // Generic error (never expose details)
+  return NextResponse.json({
+    success: false,
+    error: 'An error occurred. Please try again.',
+    code: 'INTERNAL_ERROR',
+  }, { status: 500 });
 }
 
 export function createRateLimitResponse(retryAfter: number): NextResponse<ErrorResponse> {
