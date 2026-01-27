@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase';
 import { handleError, createRateLimitResponse } from '@/lib/errors';
 import { getClientIp } from '@/lib/ip-utils';
 import { checkAnonymousRateLimit, getRateLimitHeaders } from '@/lib/rate-limiter';
+import { sanitizeText } from '@/lib/html-sanitizer';
 
 export async function GET(
   req: NextRequest,
@@ -49,6 +50,13 @@ export async function GET(
       throw new Error('Failed to fetch roadmap items');
     }
 
+    // Sanitize output
+    const sanitizedRoadmapItems = (roadmapItems || []).map(item => ({
+      ...item,
+      title: sanitizeText(item.title),
+      description: item.description ? sanitizeText(item.description) : item.description,
+    }));
+
     return NextResponse.json(
       {
         success: true,
@@ -57,7 +65,7 @@ export async function GET(
             name: project.name,
             slug: project.slug,
           },
-          roadmap: roadmapItems || [],
+          roadmap: sanitizedRoadmapItems,
         },
       },
       { headers: getRateLimitHeaders(rateLimitResult) }

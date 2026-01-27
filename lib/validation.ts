@@ -1,7 +1,11 @@
 import { z } from 'zod';
+import { sanitizeUserInput } from '@/lib/sanitizer';
 
 export const createFeedbackSchema = z.object({
-  text: z.string().min(1, 'Feedback text is required').max(5000, 'Feedback text too long'),
+  text: z.string()
+    .min(1, 'Feedback text is required')
+    .max(5000, 'Feedback text too long')
+    .pipe(z.string().transform(sanitizeUserInput)),
   sourceType: z.enum(['manual', 'import', 'api', 'web']).optional(),
   sourceUrl: z.string().url().optional().or(z.literal('')),
 });
@@ -19,16 +23,29 @@ export const webImportSchema = z.object({
 });
 
 export const createRoadmapItemSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200, 'Title too long'),
-  description: z.string().max(2000, 'Description too long').optional(),
+  title: z.string()
+    .min(1, 'Title is required')
+    .max(200, 'Title too long')
+    .pipe(z.string().transform(sanitizeUserInput)),
+  description: z.string()
+    .max(2000, 'Description too long')
+    .optional()
+    .transform(v => v ? sanitizeUserInput(v) : v),
   status: z.enum(['planned', 'in_progress', 'completed', 'cancelled']),
   priority: z.enum(['low', 'medium', 'high', 'critical']),
   clusterId: z.string().uuid().optional(),
 });
 
 export const updateRoadmapItemSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200, 'Title too long').optional(),
-  description: z.string().max(2000, 'Description too long').optional(),
+  title: z.string()
+    .min(1, 'Title is required')
+    .max(200, 'Title too long')
+    .optional()
+    .transform(v => v ? sanitizeUserInput(v) : v),
+  description: z.string()
+    .max(2000, 'Description too long')
+    .optional()
+    .transform(v => v ? sanitizeUserInput(v) : v),
   status: z.enum(['planned', 'in_progress', 'completed', 'cancelled']).optional(),
   priority: z.enum(['low', 'medium', 'high', 'critical']).optional(),
   clusterId: z.string().uuid().optional().nullable(),
@@ -70,15 +87,28 @@ export const apiUsageQuerySchema = z.object({
 // Phase 4 Validation Schemas
 
 export const createPollSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200, 'Title too long'),
-  description: z.string().max(1000, 'Description too long').optional(),
+  title: z.string()
+    .min(1, 'Title is required')
+    .max(200, 'Title too long')
+    .pipe(z.string().transform(sanitizeUserInput)),
+  description: z.string()
+    .max(1000, 'Description too long')
+    .optional()
+    .transform(v => v ? sanitizeUserInput(v) : v),
   options: z.array(z.string().min(1).max(500)).min(2, 'At least 2 options required').max(10, 'Maximum 10 options allowed'),
   status: z.enum(['active', 'closed', 'draft']).optional()
 });
 
 export const updatePollSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200, 'Title too long').optional(),
-  description: z.string().max(1000, 'Description too long').optional(),
+  title: z.string()
+    .min(1, 'Title is required')
+    .max(200, 'Title too long')
+    .optional()
+    .transform(v => v ? sanitizeUserInput(v) : v),
+  description: z.string()
+    .max(1000, 'Description too long')
+    .optional()
+    .transform(v => v ? sanitizeUserInput(v) : v),
   status: z.enum(['active', 'closed', 'draft']).optional(),
   closed_at: z.string().datetime().optional()
 });
@@ -141,22 +171,38 @@ export const addPollOptionsSchema = z.object({
 
 // Survey Schemas
 export const createSurveySchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200, 'Title too long'),
-  description: z.string().max(1000, 'Description too long').optional(),
+  title: z.string()
+    .min(1, 'Title is required')
+    .max(200, 'Title too long')
+    .pipe(z.string().transform(sanitizeUserInput)),
+  description: z.string()
+    .max(1000, 'Description too long')
+    .optional()
+    .transform(v => v ? sanitizeUserInput(v) : v),
   status: z.enum(['draft', 'active', 'closed']).optional(),
   settings: z.record(z.string(), z.any()).optional()
 });
 
 export const updateSurveySchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200, 'Title too long').optional(),
-  description: z.string().max(1000, 'Description too long').optional(),
+  title: z.string()
+    .min(1, 'Title is required')
+    .max(200, 'Title too long')
+    .optional()
+    .transform(v => v ? sanitizeUserInput(v) : v),
+  description: z.string()
+    .max(1000, 'Description too long')
+    .optional()
+    .transform(v => v ? sanitizeUserInput(v) : v),
   status: z.enum(['draft', 'active', 'closed']).optional(),
   settings: z.record(z.string(), z.any()).optional(),
   closed_at: z.string().datetime().optional()
 });
 
 export const createSurveyQuestionSchema = z.object({
-  question_text: z.string().min(1, 'Question text is required').max(1000, 'Question text too long'),
+  question_text: z.string()
+    .min(1, 'Question text is required')
+    .max(1000, 'Question text too long')
+    .pipe(z.string().transform(sanitizeUserInput)),
   question_type: z.enum(['multiple_choice', 'single_choice', 'text', 'rating', 'yes_no']),
   options: z.array(z.object({
     text: z.string().min(1, 'Option text is required').max(200, 'Option text too long'),
@@ -171,7 +217,9 @@ export const submitSurveyResponseSchema = z.object({
   respondent_email: z.string().email().optional(),
   answers: z.array(z.object({
     question_id: z.string().uuid('Invalid question ID'),
-    answer_text: z.string().optional(),
+    answer_text: z.string()
+      .optional()
+      .transform(v => v ? sanitizeUserInput(v) : v),
     answer_value: z.any().optional()
   })).min(1, 'At least one answer required'),
   metadata: z.record(z.string(), z.any()).optional()
@@ -201,22 +249,38 @@ export const analyticsQuerySchema = z.object({
 });
 
 export const createCustomMetricSchema = z.object({
-  name: z.string().min(1, 'Name is required').max(100, 'Name too long'),
-  description: z.string().max(500, 'Description too long').optional(),
+  name: z.string()
+    .min(1, 'Name is required')
+    .max(100, 'Name too long')
+    .pipe(z.string().transform(sanitizeUserInput)),
+  description: z.string()
+    .max(500, 'Description too long')
+    .optional()
+    .transform(v => v ? sanitizeUserInput(v) : v),
   formula: z.string().min(1, 'Formula is required').max(2000, 'Formula too long'),
   chart_type: z.enum(['line', 'bar', 'pie', 'metric']).optional()
 });
 
 export const updateCustomMetricSchema = z.object({
-  name: z.string().min(1, 'Name is required').max(100, 'Name too long').optional(),
-  description: z.string().max(500, 'Description too long').optional(),
+  name: z.string()
+    .min(1, 'Name is required')
+    .max(100, 'Name too long')
+    .optional()
+    .transform(v => v ? sanitizeUserInput(v) : v),
+  description: z.string()
+    .max(500, 'Description too long')
+    .optional()
+    .transform(v => v ? sanitizeUserInput(v) : v),
   formula: z.string().min(1, 'Formula is required').max(2000, 'Formula too long').optional(),
   chart_type: z.enum(['line', 'bar', 'pie', 'metric']).optional(),
   is_active: z.boolean().optional()
 });
 
 export const createDashboardWidgetSchema = z.object({
-  name: z.string().min(1, 'Name is required').max(100, 'Name too long'),
+  name: z.string()
+    .min(1, 'Name is required')
+    .max(100, 'Name too long')
+    .pipe(z.string().transform(sanitizeUserInput)),
   widget_type: z.enum(['metric', 'chart', 'table', 'list']),
   metric_name: z.string().optional(),
   custom_metric_id: z.string().uuid().optional(),
@@ -228,7 +292,11 @@ export const createDashboardWidgetSchema = z.object({
 });
 
 export const updateDashboardWidgetSchema = z.object({
-  name: z.string().min(1, 'Name is required').max(100, 'Name too long').optional(),
+  name: z.string()
+    .min(1, 'Name is required')
+    .max(100, 'Name too long')
+    .optional()
+    .transform(v => v ? sanitizeUserInput(v) : v),
   widget_type: z.enum(['metric', 'chart', 'table', 'list']).optional(),
   metric_name: z.string().optional(),
   custom_metric_id: z.string().uuid().optional(),
@@ -248,7 +316,10 @@ export const addProjectLanguageSchema = z.object({
 });
 
 export const updateTranslationSchema = z.object({
-  value: z.string().min(1, 'Translation value is required').max(2000, 'Translation value too long'),
+  value: z.string()
+    .min(1, 'Translation value is required')
+    .max(2000, 'Translation value too long')
+    .pipe(z.string().transform(sanitizeUserInput)),
   context: z.string().max(500, 'Context too long').optional(),
   is_approved: z.boolean().optional()
 });
@@ -256,7 +327,10 @@ export const updateTranslationSchema = z.object({
 export const bulkUpdateTranslationsSchema = z.object({
   translations: z.array(z.object({
     key: z.string().min(1, 'Translation key is required'),
-    value: z.string().min(1, 'Translation value is required').max(2000, 'Translation value too long'),
+    value: z.string()
+      .min(1, 'Translation value is required')
+      .max(2000, 'Translation value too long')
+      .pipe(z.string().transform(sanitizeUserInput)),
     context: z.string().max(500, 'Context too long').optional()
   })).min(1, 'At least one translation required')
 });

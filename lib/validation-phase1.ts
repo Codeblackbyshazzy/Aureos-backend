@@ -1,24 +1,37 @@
 import { z } from 'zod';
+import { sanitizeUserInput } from './sanitizer';
 
 export const voteSchema = z.object({});
 
 export const commentSchema = z.object({
-  text: z.string().min(1).max(5000),
+  text: z.string()
+    .min(1)
+    .max(5000)
+    .pipe(z.string().transform(v => sanitizeUserInput(v, 5000))),
   parentCommentId: z.string().uuid().optional()
 });
 
 export const commentUpdateSchema = z.object({
-  text: z.string().min(1).max(5000)
+  text: z.string()
+    .min(1)
+    .max(5000)
+    .pipe(z.string().transform(v => sanitizeUserInput(v, 5000)))
 });
 
 export const topicSchema = z.object({
-  name: z.string().min(1).max(100),
+  name: z.string()
+    .min(1)
+    .max(100)
+    .pipe(z.string().transform(v => sanitizeUserInput(v, 100))),
   color: z.string().regex(/^#[0-9A-F]{6}$/i).optional().nullable(),
   icon: z.string().max(50).optional().nullable()
 });
 
 export const statusSchema = z.object({
-  name: z.string().min(1).max(100),
+  name: z.string()
+    .min(1)
+    .max(100)
+    .pipe(z.string().transform(v => sanitizeUserInput(v, 100))),
   color: z.string().regex(/^#[0-9A-F]{6}$/i),
   icon: z.string().max(50).optional().nullable(),
   display_order: z.number().int().min(0).optional()

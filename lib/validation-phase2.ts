@@ -1,18 +1,33 @@
 import { z } from 'zod';
+import { sanitizeUserInput } from './sanitizer';
 
 export const announcementStatusSchema = z.enum(['draft', 'scheduled', 'published']);
 
 export const createAnnouncementSchema = z.object({
-  title: z.string().min(1).max(200),
-  content: z.string().min(1).max(20000),
+  title: z.string()
+    .min(1)
+    .max(200)
+    .pipe(z.string().transform(v => sanitizeUserInput(v, 200))),
+  content: z.string()
+    .min(1)
+    .max(20000)
+    .pipe(z.string().transform(v => sanitizeUserInput(v, 20000))),
   categoryId: z.string().uuid().optional().nullable(),
   status: announcementStatusSchema.exclude(['published']).optional(),
   scheduledFor: z.string().datetime().optional(),
 });
 
 export const updateAnnouncementSchema = z.object({
-  title: z.string().min(1).max(200).optional(),
-  content: z.string().min(1).max(20000).optional(),
+  title: z.string()
+    .min(1)
+    .max(200)
+    .optional()
+    .transform(v => v ? sanitizeUserInput(v, 200) : v),
+  content: z.string()
+    .min(1)
+    .max(20000)
+    .optional()
+    .transform(v => v ? sanitizeUserInput(v, 20000) : v),
   categoryId: z.string().uuid().optional().nullable(),
   status: announcementStatusSchema.exclude(['published']).optional(),
   scheduledFor: z.string().datetime().optional().nullable(),
@@ -32,7 +47,7 @@ export const subscribeToAnnouncementsSchema = z.object({
 export const configureSsoSchema = z
   .object({
     providerType: z.enum(['oidc', 'saml']),
-    name: z.string().min(1).max(120),
+    name: z.string().min(1).max(120).pipe(z.string().transform(v => sanitizeUserInput(v, 120))),
     enabled: z.boolean().optional().default(true),
     attributeMapping: z.record(z.string(), z.string()).optional().default({}),
 
@@ -82,26 +97,26 @@ export const ssoLogoutSchema = z.object({
 });
 
 export const createEmailTemplateSchema = z.object({
-  name: z.string().min(1).max(120),
-  subject: z.string().min(1).max(200),
-  bodyHtml: z.string().min(1).max(200000).optional(),
-  bodyText: z.string().min(1).max(200000).optional(),
+  name: z.string().min(1).max(120).pipe(z.string().transform(v => sanitizeUserInput(v, 120))),
+  subject: z.string().min(1).max(200).pipe(z.string().transform(v => sanitizeUserInput(v, 200))),
+  bodyHtml: z.string().min(1).max(200000).optional().transform(v => v ? sanitizeUserInput(v, 200000) : v),
+  bodyText: z.string().min(1).max(200000).optional().transform(v => v ? sanitizeUserInput(v, 200000) : v),
 });
 
 export const updateEmailTemplateSchema = z.object({
-  name: z.string().min(1).max(120).optional(),
-  subject: z.string().min(1).max(200).optional(),
-  bodyHtml: z.string().min(1).max(200000).optional().nullable(),
-  bodyText: z.string().min(1).max(200000).optional().nullable(),
+  name: z.string().min(1).max(120).optional().transform(v => v ? sanitizeUserInput(v, 120) : v),
+  subject: z.string().min(1).max(200).optional().transform(v => v ? sanitizeUserInput(v, 200) : v),
+  bodyHtml: z.string().min(1).max(200000).optional().nullable().transform(v => v ? sanitizeUserInput(v, 200000) : v),
+  bodyText: z.string().min(1).max(200000).optional().nullable().transform(v => v ? sanitizeUserInput(v, 200000) : v),
 });
 
 export const sendEmailSchema = z.object({
   to: z.string().email(),
   templateId: z.string().uuid().optional(),
-  subject: z.string().min(1).max(200).optional(),
+  subject: z.string().min(1).max(200).optional().transform(v => v ? sanitizeUserInput(v, 200) : v),
   variables: z.record(z.string(), z.string()).optional().default({}),
-  html: z.string().min(1).max(200000).optional(),
-  text: z.string().min(1).max(200000).optional(),
+  html: z.string().min(1).max(200000).optional().transform(v => v ? sanitizeUserInput(v, 200000) : v),
+  text: z.string().min(1).max(200000).optional().transform(v => v ? sanitizeUserInput(v, 200000) : v),
 });
 
 export const emailPreferencesSchema = z.object({

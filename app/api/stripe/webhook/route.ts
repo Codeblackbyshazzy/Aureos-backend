@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import { createAdminClient } from '@/lib/supabase';
 import { env } from '@/lib/env';
+import { sanitizeForLog } from '@/lib/sanitizer';
 import Stripe from 'stripe';
 
 function mapStripeSubscriptionStatus(
@@ -22,13 +23,11 @@ function mapStripeSubscriptionStatus(
 }
 
 export async function POST(req: NextRequest) {
+  // Validate secret exists (from Task 1)
   if (!env.STRIPE_WEBHOOK_SECRET) {
+    console.error('⚠️ STRIPE_WEBHOOK_SECRET not configured');
     return NextResponse.json(
-      { 
-        success: false, 
-        error: "Webhook secret not configured", 
-        code: "CONFIGURATION_ERROR" 
-      }, 
+      { success: false, error: 'Webhook not configured', code: 'CONFIG_ERROR' },
       { status: 400 }
     );
   }
@@ -37,6 +36,7 @@ export async function POST(req: NextRequest) {
   const signature = req.headers.get('stripe-signature');
 
   if (!signature) {
+    console.warn('Webhook signature missing');
     return NextResponse.json({ error: 'No signature' }, { status: 400 });
   }
 
@@ -48,17 +48,12 @@ export async function POST(req: NextRequest) {
       signature,
       env.STRIPE_WEBHOOK_SECRET
     );
-  } catch (error: any) {
-    let event_type = 'unknown';
-    try {
-      const bodyObj = JSON.parse(body);
-      event_type = bodyObj.type;
-    } catch (e) {}
-
-    console.error('Webhook signature verification failed:', {
-      timestamp: new Date().toISOString(),
-      signature_provided: signature,
-      event_type: event_type
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.warn('Webhook signature verification failed', {
+      error: sanitizeForLog(message),
+      eventType: (error as any)?.type || 'unknown',
+      timestamp: new Date().toISOString()
     });
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
   }
@@ -168,7 +163,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    console.error('Webhook handler error:', error);
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Webhook handler error:', sanitizeForLog(message));
     return NextResponse.json({ error: 'Webhook handler failed' }, { status: 500 });
   }
 }
